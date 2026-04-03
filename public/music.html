@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Music — Virginia Thorn</title>
+  <meta name="description" content="Virginia Thorn is a classically trained singer from South East London, composing music on vocals and guitar. Folk, singer-songwriter.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+  <link rel="stylesheet" href="assets/fonts/fonts.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="nav scrolled" id="navbar">
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">Virginia Thorn</a>
+      <div class="nav-links">
+        <a href="bio.html" class="nav-link">Bio</a>
+        <a href="reels.html" class="nav-link">Reels</a>
+        <a href="headshots.html" class="nav-link">Headshots</a>
+        <a href="music.html" class="nav-link active">Music</a>
+        <a href="voiceover.html" class="nav-link">Voice Over</a>
+        <a href="projects.html" class="nav-link">Projects</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="nav-mobile" id="navMobile">
+    <a href="bio.html" class="nav-link">Bio</a>
+    <a href="reels.html" class="nav-link">Reels</a>
+    <a href="headshots.html" class="nav-link">Headshots</a>
+    <a href="music.html" class="nav-link active">Music</a>
+    <a href="voiceover.html" class="nav-link">Voice Over</a>
+    <a href="projects.html" class="nav-link">Projects</a>
+    <a href="contact.html" class="nav-link">Contact</a>
+  </div>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <span class="section-label">Singer · Songwriter</span>
+    <h1 class="page-hero-title">Musician</h1>
+  </section>
+
+  <!-- Music Gallery -->
+  <section class="section">
+    <div class="section-default">
+      <div class="music-hero">
+        <div class="music-photo reveal reveal-delay-1" onclick="openLightbox(this)">
+          <img src="assets/images/music/green-note.jpg" alt="Green Note" loading="lazy">
+        </div>
+        <div class="music-photo reveal reveal-delay-2" onclick="openLightbox(this)">
+          <img src="assets/images/music/publicity-rosalind-hobley.jpg" alt="Photographer Rosalind Hobley" loading="lazy">
+        </div>
+        <div class="music-photo reveal reveal-delay-3" onclick="openLightbox(this)">
+          <img src="assets/images/music/the-hideaway.jpg" alt="The Hideaway" loading="lazy">
+        </div>
+        <div class="music-photo reveal reveal-delay-4" onclick="openLightbox(this)">
+          <img src="assets/images/music/lancaster-music-festival.jpg" alt="Lancaster Music Festival" loading="lazy">
+        </div>
+      </div>
+
+      <!-- Album Links -->
+      <div class="reveal" style="margin-bottom: var(--space-2xl);">
+        <div class="section-header">
+          <span class="section-label">Albums</span>
+          <h2 class="section-title">Listen</h2>
+          <div class="section-divider"></div>
+        </div>
+        <div class="music-links" style="justify-content: center;">
+          <a href="https://virginiathorn28.bandcamp.com/releases" target="_blank" rel="noopener" class="music-link-btn">
+            🎵 Album 'how shall we say goodbye?'
+          </a>
+          <a href="https://ka-tet-music.bandcamp.com/releases" target="_blank" rel="noopener" class="music-link-btn">
+            🎵 Album 'Into the black' — Ka-Tet (band)
+          </a>
+        </div>
+      </div>
+
+      <!-- Singing Showreel Audio -->
+      <div class="reveal" style="margin-bottom: var(--space-2xl);">
+        <div class="audio-card" style="max-width: 600px; margin: 0 auto;">
+          <h4 class="audio-card-title">Singing Showreel</h4>
+          <audio controls preload="none" style="width: 100%;">
+            <source src="assets/audio/music/singing-showreel.mp3" type="audio/mpeg">
+          </audio>
+        </div>
+      </div>
+
+      <!-- Video Embeds -->
+      <div class="reveal" style="margin-bottom: var(--space-2xl);">
+        <div class="reels-grid">
+          <div class="reel-card">
+            <div class="reel-card-video">
+              <iframe src="https://www.youtube.com/embed/jkvL-gnO2iw" title="Green Note Promo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="reel-card-body">
+              <h3 class="reel-card-title">Green Note Promo</h3>
+            </div>
+          </div>
+          <div class="reel-card">
+            <div class="reel-card-video">
+              <iframe src="https://www.youtube.com/embed/82Kst6as400" title="Call It Home — Virginia Thorn" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="reel-card-body">
+              <h3 class="reel-card-title">Call It Home — Virginia Thorn</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Music Biography -->
+      <div class="section" style="padding-top: 0;">
+        <div class="section-narrow">
+          <div class="section-header reveal">
+            <span class="section-label">Music</span>
+            <h2 class="section-title">Biography</h2>
+            <div class="section-divider"></div>
+          </div>
+          <div class="bio-content reveal" style="max-width: 100%;">
+            <p>Virginia Thorn is a classically trained singer from South East London, she composes music on vocals &amp; guitar. "Growing up records were the most precious things in our home. During the Second World War my dad collected hundreds of jazz albums: Bessie Smith, Ella Fitzgerald &amp; Billie Holiday. My mum played Astor Piazzolla &amp; Carlos Gardel from her childhood in northern Argentina. Hearing that music was the thing that made me want to sing."</p>
+            <p>In her late teens she discovered the music of the <a href="https://en.wikipedia.org/wiki/American_folk_music_revival" target="_blank" rel="noopener">1960's Folk Revival</a>. Artists from America and Canada: <a href="http://www.bobdylan.com/" target="_blank" rel="noopener">Bob Dylan</a>, <a href="http://www.joanbaez.com/" target="_blank" rel="noopener">Joan Baez</a>, <a href="http://jonimitchell.com/" target="_blank" rel="noopener">Joni Mitchell</a>. "As soon as I had saved enough money, I visited New York, <a href="https://en.wikipedia.org/wiki/Greenwich_Village" target="_blank" rel="noopener">Greenwich Village</a>, to see all the places the folk artists had played."</p>
+            <p>The 1960's Folk Revivalists, drawing on the historic music and poetry of Traditional Folk and Blues, often wrote songs that sprawled many verses. "I love to get lost in music like that." Some contemporary influences are Belle and Sebastian, Radiohead, Tom Waits, and Lhasa De Sela.</p>
+            <p>"When I am songwriting I feel like I can plug into a sense of life moving and rest in it."</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <a href="index.html" class="nav-logo" style="margin-bottom: var(--space-sm);">Virginia Thorn</a>
+      <nav class="footer-nav">
+        <a href="index.html">Home</a>
+        <a href="bio.html">Bio</a>
+        <a href="reels.html">Reels</a>
+        <a href="headshots.html">Headshots</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+      <div class="footer-social">
+        <a href="https://app.spotlight.com/2378-4534-1999" target="_blank" rel="noopener">spotlight</a>
+        <span class="footer-social-divider">|</span>
+        <a href="https://www.imdb.com/name/nm2342284/" target="_blank" rel="noopener">imdb</a>
+        <span class="footer-social-divider">|</span>
+        <a href="https://www.youtube.com/channel/UCLiNj67wFo1XaHqo8nef8YA" target="_blank" rel="noopener">youtube</a>
+        <span class="footer-social-divider">|</span>
+        <a href="https://www.instagram.com/virginiathorn_on_insta/" target="_blank" rel="noopener">instagram</a>
+        <span class="footer-social-divider">|</span>
+        <a href="https://twitter.com/virginia_thorn" target="_blank" rel="noopener">twitter</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 Virginia Thorn. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
+    <img src="" alt="" id="lightboxImg">
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
