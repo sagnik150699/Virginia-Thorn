@@ -71,6 +71,7 @@ node_modules/
 # AI tool configs
 .claude/
 .codex/
+.agents/
 
 # Temp/tool-generated files
 chrome-crash/
