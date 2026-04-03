@@ -1,0 +1,39 @@
+name: Deploy Preview to Firebase Hosting
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+    paths:
+      - "public/**"
+      - "firebase.json"
+      - ".firebaserc"
+      - ".github/workflows/**"
+
+concurrency:
+  group: firebase-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  deploy_preview:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Deploy PR preview
+        uses: FirebaseExtended/action-hosting-deploy@v0.10.0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          projectId: virginia-thorn
+          expires: 7d

@@ -1,58 +1,83 @@
-# Virginia Thorn Static Site
+# Virginia Thorn Portfolio Website
 
-Static portfolio site for Virginia Thorn, designed and built by Sagnik Bhattacharya, prepared for Firebase Hosting as a fully static deployment.
+A fast, static portfolio website built for **Virginia Thorn** — a Meisner-trained actor, classically trained singer, Emmy Award-winning sound editor, and voice-over artist based in London & East Sussex. 
 
-## Stack
+The site is fully responsive, dependency-free (no complex bundlers or frameworks), and designed for quick loading with elegant, modern interactions.
 
-- Plain HTML, CSS, and JavaScript
-- Firebase Hosting for deployment
-- Self-hosted fonts, images, and audio under `public/assets`
+## 🚀 Live Demo
+[virginiathorn.com](https://virginiathorn.com)
 
-## Author
+## ✨ Features
+* **Modern Aesthetic:** Clean, minimalist design with smooth scroll animations.
+* **Fully Responsive:** Adapts seamlessly to all screen sizes and mobile devices.
+* **Comprehensive Portfolio:** Includes dedicated pages for Bio, Reels, Headshots, Music, Voice Over, and Featured Projects.
+* **Lightweight & Fast:** Built entirely with plain HTML, CSS, and Vanilla JavaScript. No heavy frontend frameworks or build steps required.
+* **Self-Hosted Assets:** All fonts, images, and audio are hosted locally within the project to ensure structural independence.
 
-This website was written and prepared for static hosting by Sagnik Bhattacharya.
+## 🛠️ Tech Stack
+* **Core:** HTML5, CSS3, Vanilla JS
+* **Deployment:** Firebase Hosting (configured for fully static delivery)
 
-## Project Structure
+## 📁 Project Structure
 
-- `public/` static site files served by Firebase
-- `public/assets/images/` local image assets
-- `public/assets/audio/` local audio assets
-- `public/assets/fonts/` local font files and stylesheet
-- `firebase.json` Firebase Hosting config
-- `.firebaserc` default Firebase project alias
-
-## Local Preview
-
-If Firebase CLI is installed:
-
-```bash
-firebase serve
+```text
+public/
+├── assets/
+│   ├── audio/         # Local audio and voice-over assets
+│   ├── fonts/         # Self-hosted fonts
+│   └── images/        # High-res portraits, gallery images, and UI graphics
+├── bio.html           # Biography & background
+├── contact.html       # Contact details
+├── headshots.html     # Photography gallery
+├── index.html         # Homepage
+├── music.html         # Music portfolio
+├── projects.html      # Past and current acting/directing projects
+├── reels.html         # Video showreels
+├── script.js          # Interactions (Lightbox, Navigation, etc.)
+├── styles.css         # Global styles
+└── voiceover.html     # Voiceover samples
+firebase.json          # Firebase Hosting configuration
+.firebaserc            # Firebase project alias
 ```
 
-Or deploy directly:
+## 💻 Local Development
 
-```bash
-firebase deploy
-```
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repo-url>
+   cd virginia-thorn-portfolio
+   ```
 
-## GitHub Publish Notes
+2. **Serve Locally:**
+   Since this is a fully static site, you can use any local web server. If you have the Firebase CLI installed:
+   ```bash
+   firebase serve
+   ```
+   *Alternatively, use extensions like `Live Server` in VS Code, Python's `http.server`, or Node's `http-server`.*
 
-This repo has been cleaned so the site does not depend on Squarespace for runtime hosting or asset delivery.
+3. **Deploying (Firebase):**
+   ```bash
+   firebase deploy --only hosting
+   ```
 
-Before publishing, keep these rules in mind:
+## 🔒 Notes & Guidelines
 
-- Do not commit local tool folders such as `.claude/`
-- Do not commit Firebase debug logs
-- Do not add service account files, `.env` files, or private keys
-- The site intentionally keeps outbound links and embeds for services like YouTube, Bandcamp, Spotlight, IMDb, and social platforms
+* **Platform Independence:** This repository has been prepared to run entirely independently from previous CMS providers.
+* **Outbound Content:** The site intentionally uses embeds and external links (YouTube, Bandcamp, Spotlight, IMDb) for optimum performance and standard portfolio practices.
+* **Security:** Keep private keys, `.env` files, Firebase debug logs, or AI tooling directories (like `.claude/`) out of version control.
+* **Privacy:** The `public/assets` directory may contain personal information (such as CV screenshots). Always review personal content before public distribution.
 
-## Security Notes
+## License and Usage
 
-- No private keys or service account credentials are included in the repo
-- Firebase Hosting is configured as a static site only
-- Fonts, audio, images, CSS, and JS are served locally from the repo
-- `.firebaserc` contains the Firebase project ID only; it is not a secret
+This repository is proprietary and is provided for viewing on GitHub only. It is not open source.
 
-## Content Note
+No license or permission is granted to copy, reproduce, modify, publish, distribute, sublicense, sell, reuse, or create derivative works from any part of this repository, including the source code, HTML, CSS, JavaScript, design, layout, text, images, graphics, audio, branding, and other assets, without prior written permission from the copyright holder(s).
 
-Some site content is intentionally public-facing personal portfolio material, including a CV screenshot in `public/assets/images/cv/cv-screenshot.png`. Review that content before publishing if you want to reduce personal information exposure.
+See the [LICENSE](LICENSE) file for the full all-rights-reserved notice.
+
+## 👨‍💻 Author and Development
+
+Designed and built by **[Sagnik Bhattacharya](https://sagnikbhattacharya.com)**.
+
+---
+*© 2026 Virginia Thorn. All rights reserved.*

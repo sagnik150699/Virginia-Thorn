@@ -1,0 +1,33 @@
+name: Deploy Production to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "public/**"
+      - "firebase.json"
+      - ".firebaserc"
+      - ".github/workflows/**"
+  workflow_dispatch:
+
+concurrency:
+  group: firebase-production
+  cancel-in-progress: true
+
+jobs:
+  deploy_live:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Deploy live site
+        uses: FirebaseExtended/action-hosting-deploy@v0.10.0
+        with:
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+          projectId: virginia-thorn
+          channelId: live

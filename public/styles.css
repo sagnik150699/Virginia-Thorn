@@ -1236,25 +1236,6 @@ button {
   gap: var(--space-lg);
 }
 
-.footer-nav {
-  display: flex;
-  gap: var(--space-lg);
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.footer-nav a {
-  font-size: var(--fs-small);
-  color: var(--color-text-muted);
-  letter-spacing: var(--ls-wide);
-  text-transform: uppercase;
-  transition: color var(--transition-fast);
-}
-
-.footer-nav a:hover {
-  color: var(--color-text-primary);
-}
-
 .footer-social {
   display: flex;
   gap: var(--space-md);
