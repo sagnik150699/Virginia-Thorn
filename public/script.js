@@ -326,6 +326,96 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(style);
   }
 
+  // ══════════════════════════════════════════════════════════════
+  //  CUSTOM AUDIO PLAYER
+  // ══════════════════════════════════════════════════════════════
+  let currentAudio = null;
+  let currentCard = null;
+
+  function formatTime(sec) {
+    if (!sec || isNaN(sec)) return '0:00';
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return m + ':' + (s < 10 ? '0' : '') + s;
+  }
+
+  document.querySelectorAll('.vo-audio-card[data-src]').forEach(card => {
+    const btn = card.querySelector('.player-btn');
+    const playIcon = card.querySelector('.player-icon-play');
+    const pauseIcon = card.querySelector('.player-icon-pause');
+    const progressBar = card.querySelector('.player-progress');
+    const progressFill = card.querySelector('.player-progress-fill');
+    const timeEl = card.querySelector('.player-time');
+    const src = card.dataset.src;
+    let audio = null;
+
+    function initAudio() {
+      if (!audio) {
+        audio = new Audio(src);
+        audio.preload = 'none';
+        audio.addEventListener('timeupdate', () => {
+          if (audio.duration) {
+            const pct = (audio.currentTime / audio.duration) * 100;
+            progressFill.style.width = pct + '%';
+            timeEl.textContent = formatTime(audio.currentTime);
+          }
+        });
+        audio.addEventListener('ended', () => {
+          card.classList.remove('playing');
+          playIcon.style.display = '';
+          pauseIcon.style.display = 'none';
+          progressFill.style.width = '0%';
+          timeEl.textContent = '0:00';
+          currentAudio = null;
+          currentCard = null;
+        });
+        audio.addEventListener('loadedmetadata', () => {
+          timeEl.textContent = formatTime(audio.duration);
+        });
+      }
+      return audio;
+    }
+
+    btn.addEventListener('click', () => {
+      const a = initAudio();
+
+      // Stop any other playing audio
+      if (currentAudio && currentAudio !== a) {
+        currentAudio.pause();
+        currentAudio.currentTime = 0;
+        currentCard.classList.remove('playing');
+        currentCard.querySelector('.player-icon-play').style.display = '';
+        currentCard.querySelector('.player-icon-pause').style.display = 'none';
+        currentCard.querySelector('.player-progress-fill').style.width = '0%';
+        currentCard.querySelector('.player-time').textContent = '0:00';
+      }
+
+      if (a.paused) {
+        a.play();
+        card.classList.add('playing');
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = '';
+        currentAudio = a;
+        currentCard = card;
+      } else {
+        a.pause();
+        card.classList.remove('playing');
+        playIcon.style.display = '';
+        pauseIcon.style.display = 'none';
+      }
+    });
+
+    // Click to seek on progress bar
+    progressBar.addEventListener('click', (e) => {
+      const a = initAudio();
+      if (a.duration) {
+        const rect = progressBar.getBoundingClientRect();
+        const pct = (e.clientX - rect.left) / rect.width;
+        a.currentTime = pct * a.duration;
+      }
+    });
+  });
+
 });
 
 // ══════════════════════════════════════════════════════════════

@@ -569,9 +569,73 @@ button {
 /* ═══════════════════════════════════════════════════════════════
    NEWS / FEATURED PROJECTS CARDS
    ═══════════════════════════════════════════════════════════════ */
+/* Featured card — full-width horizontal layout */
+.news-card--featured {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: all var(--transition-base);
+  cursor: pointer;
+  margin-bottom: var(--space-lg);
+}
+
+.news-card--featured:hover {
+  border-color: var(--color-border-hover);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
+}
+
+.news-card--featured .news-card-image {
+  aspect-ratio: auto;
+  height: 100%;
+  min-height: 360px;
+  overflow: hidden;
+}
+
+.news-card--featured .news-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform var(--transition-slow);
+}
+
+.news-card--featured:hover .news-card-image img {
+  transform: scale(1.04);
+}
+
+.news-card--featured .news-card-body {
+  padding: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.news-card--featured .news-card-title {
+  font-size: var(--fs-h2);
+}
+
+.news-card--featured .news-card-text {
+  -webkit-line-clamp: 5;
+  font-size: var(--fs-body);
+}
+
+.news-card-tag {
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-sm);
+  display: inline-block;
+}
+
+/* Grid cards */
 .news-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: var(--space-lg);
 }
 
@@ -592,7 +656,7 @@ button {
 
 .news-card-image {
   position: relative;
-  aspect-ratio: 3 / 4;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
 }
 
@@ -659,6 +723,11 @@ button {
 
 .bio-image-wrapper {
   position: relative;
+}
+
+.bio-image-sticky {
+  position: sticky;
+  top: 100px;
 }
 
 .bio-image-wrapper img {
@@ -793,6 +862,16 @@ button {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: var(--space-md);
+}
+
+.gallery-grid--three {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.gallery-credit {
+  color: var(--color-text-primary);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-wide);
 }
 
 .gallery-item {
@@ -1043,16 +1122,93 @@ button {
   padding: var(--space-lg);
 }
 
-.vo-audio-icon {
-  color: var(--color-accent);
-  margin-bottom: var(--space-sm);
-}
-
 .vo-audio-desc {
   color: var(--color-text-muted);
   font-size: var(--fs-small);
   line-height: 1.5;
-  margin-bottom: var(--space-md);
+  margin: 0;
+}
+
+/* Custom audio player */
+.custom-player {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+}
+
+.player-btn {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+  margin-top: 2px;
+}
+
+.player-btn:hover {
+  background: var(--color-accent-hover);
+  transform: scale(1.08);
+  box-shadow: 0 0 20px rgba(212, 168, 83, 0.3);
+}
+
+.player-btn svg {
+  margin-left: 2px;
+}
+
+.player-btn .player-icon-pause svg,
+.vo-audio-card.playing .player-btn .player-icon-pause {
+  margin-left: 0;
+}
+
+.player-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.player-info .audio-card-title {
+  margin-bottom: var(--space-xs);
+}
+
+.player-track {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: var(--space-md);
+}
+
+.player-progress {
+  flex: 1;
+  height: 4px;
+  background: var(--color-bg-elevated);
+  border-radius: 2px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.player-progress:hover {
+  height: 6px;
+}
+
+.player-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--color-accent), var(--color-accent-hover));
+  border-radius: 2px;
+  transition: width 0.1s linear;
+}
+
+.player-time {
+  font-size: var(--fs-caption);
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+  min-width: 36px;
+  text-align: right;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1098,6 +1254,21 @@ button {
   width: 100%;
   height: 40px;
   border-radius: var(--radius-sm);
+}
+
+/* Playing state glow */
+.vo-audio-card.playing {
+  border-color: var(--color-border-hover);
+  box-shadow: 0 0 30px rgba(212, 168, 83, 0.12);
+}
+
+.vo-audio-card.playing .player-btn {
+  animation: pulsePlay 2s ease-in-out infinite;
+}
+
+@keyframes pulsePlay {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(212, 168, 83, 0.4); }
+  50% { box-shadow: 0 0 16px 4px rgba(212, 168, 83, 0.2); }
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1364,6 +1535,10 @@ button {
   display: flex;
   flex-direction: column;
   gap: var(--space-md);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-xl);
 }
 
 .form-group label {
@@ -1528,6 +1703,13 @@ button {
   letter-spacing: var(--ls-wide);
 }
 
+.page-hero-subtitle {
+  color: var(--color-text-secondary);
+  font-size: var(--fs-body);
+  max-width: 500px;
+  margin: var(--space-sm) auto 0;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    LIGHTBOX
    ═══════════════════════════════════════════════════════════════ */
@@ -1588,12 +1770,25 @@ button {
     gap: var(--space-xl);
   }
 
+  .bio-image-sticky {
+    position: relative;
+    top: 0;
+  }
+
   .project-card {
     grid-template-columns: 1fr;
   }
 
   .contact-layout {
     grid-template-columns: 1fr;
+  }
+
+  .news-card--featured {
+    grid-template-columns: 1fr;
+  }
+
+  .news-card--featured .news-card-image {
+    min-height: 280px;
   }
 }
 
@@ -1628,6 +1823,10 @@ button {
 
   .hero-content {
     margin-top: auto;
+  }
+
+  .gallery-grid--three {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
