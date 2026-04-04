@@ -1692,6 +1692,16 @@ button {
   color: var(--color-text-muted);
 }
 
+.footer-copy a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-copy a:hover {
+  color: var(--color-text);
+}
+
 /* ═══════════════════════════════════════════════════════════════
    PAGE HERO (for sub-pages)
    ═══════════════════════════════════════════════════════════════ */
