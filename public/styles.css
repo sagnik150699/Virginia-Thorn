@@ -358,8 +358,9 @@ button {
   position: relative;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   overflow: hidden;
 }
 
@@ -373,8 +374,8 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: center 12%;
-  filter: brightness(0.35) contrast(1.1);
+  object-position: center 15%;
+  filter: brightness(0.55) contrast(1.05);
   transform: scale(1.05);
   transition: transform 8s ease-out;
 }
@@ -387,13 +388,13 @@ button {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at center 40%, transparent 0%, rgba(10, 10, 10, 0.4) 70%),
     linear-gradient(
       to bottom,
-      rgba(10, 10, 10, 0.4) 0%,
-      rgba(10, 10, 10, 0.05) 30%,
-      rgba(10, 10, 10, 0.15) 60%,
-      rgba(10, 10, 10, 0.7) 85%,
+      rgba(10, 10, 10, 0.15) 0%,
+      rgba(10, 10, 10, 0) 25%,
+      rgba(10, 10, 10, 0) 45%,
+      rgba(10, 10, 10, 0.5) 70%,
+      rgba(10, 10, 10, 0.85) 90%,
       rgba(10, 10, 10, 1) 100%
     );
   z-index: 1;
@@ -406,7 +407,7 @@ button {
   padding: var(--space-lg);
   padding-bottom: calc(var(--space-lg) + 80px);
   max-width: var(--max-width);
-  margin-top: clamp(6rem, 18vh, 14rem);
+  margin-top: auto;
 }
 
 .hero-subtitle {
@@ -939,11 +940,57 @@ button {
 /* ═══════════════════════════════════════════════════════════════
    VOICE OVER PAGE
    ═══════════════════════════════════════════════════════════════ */
+
+/* Intro split layout */
+.vo-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2xl);
+  align-items: center;
+  margin-bottom: var(--space-2xl);
+}
+
+.vo-intro-text p {
+  color: var(--color-text-secondary);
+  line-height: var(--lh-body);
+  margin-bottom: var(--space-md);
+}
+
+.vo-intro-text p:last-of-type {
+  margin-bottom: 0;
+}
+
+.vo-intro-text strong {
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.vo-intro-text em {
+  font-style: italic;
+}
+
+.vo-intro-cta {
+  margin-top: var(--space-lg) !important;
+}
+
+.vo-intro-image {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+}
+
+.vo-intro-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Image grid */
 .vo-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--space-md);
-  margin-bottom: var(--space-2xl);
+  margin-bottom: var(--space-md);
 }
 
 .vo-image-card {
@@ -956,6 +1003,18 @@ button {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.vo-image-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Studio & credits info grid */
+.vo-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--space-md);
 }
 
 .vo-specs {
@@ -963,7 +1022,6 @@ button {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   padding: var(--space-lg);
-  margin-bottom: var(--space-lg);
 }
 
 .vo-specs h3 {
@@ -977,6 +1035,24 @@ button {
 
 .vo-specs p {
   color: var(--color-text-secondary);
+  line-height: var(--lh-body);
+}
+
+/* Audio card enhancements for VO page */
+.vo-audio-card {
+  padding: var(--space-lg);
+}
+
+.vo-audio-icon {
+  color: var(--color-accent);
+  margin-bottom: var(--space-sm);
+}
+
+.vo-audio-desc {
+  color: var(--color-text-muted);
+  font-size: var(--fs-small);
+  line-height: 1.5;
+  margin-bottom: var(--space-md);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1551,7 +1627,7 @@ button {
   }
 
   .hero-content {
-    margin-top: clamp(4rem, 12vh, 8rem);
+    margin-top: auto;
   }
 }
 
@@ -1568,6 +1644,34 @@ button {
   .footer-social {
     flex-wrap: wrap;
     justify-content: center;
+  }
+
+  .vo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .vo-info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .audio-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .vo-intro {
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+  }
+
+  .vo-intro-image {
+    order: -1;
+    aspect-ratio: 16 / 9;
+  }
+
+  .vo-grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
