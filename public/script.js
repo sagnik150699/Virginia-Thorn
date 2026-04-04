@@ -3,6 +3,19 @@
    Navigation, Scroll Reveals, Lightbox, Preloader, Animations
    ═══════════════════════════════════════════════════════════════ */
 
+// Handle bfcache restore (back/forward navigation)
+window.addEventListener('pageshow', (e) => {
+  if (e.persisted) {
+    // Remove any leftover exit transition overlays
+    document.querySelectorAll('.page-transition').forEach(el => el.remove());
+    // Dismiss preloader if still visible
+    const preloader = document.getElementById('preloader');
+    if (preloader) preloader.classList.add('hidden');
+    // Restore scrolling
+    document.body.style.overflow = '';
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
 
   // ══════════════════════════════════════════════════════════════
@@ -11,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const transition = document.querySelector('.page-transition');
   if (transition) {
     requestAnimationFrame(() => transition.classList.add('reveal'));
-    setTimeout(() => transition.remove(), 1200);
+    setTimeout(() => transition.remove(), 900);
   }
 
   // ══════════════════════════════════════════════════════════════
@@ -20,11 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const preloader = document.getElementById('preloader');
   if (preloader) {
     const dismissPreloader = () => {
-      preloader.classList.add('hidden');
-      document.querySelector('.hero')?.classList.add('loaded');
+      if (!preloader.classList.contains('hidden')) {
+        preloader.classList.add('hidden');
+        document.querySelector('.hero')?.classList.add('loaded');
+        setTimeout(() => preloader.remove(), 1000);
+      }
     };
-    window.addEventListener('load', () => setTimeout(dismissPreloader, 600));
-    setTimeout(dismissPreloader, 3000); // fallback
+    window.addEventListener('load', () => setTimeout(dismissPreloader, 1000));
+    setTimeout(dismissPreloader, 4000); // fallback
   }
 
   // ══════════════════════════════════════════════════════════════
@@ -236,24 +252,24 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ══════════════════════════════════════════════════════════════
-  //  FLOATING PARTICLES (Hero Section)
+  //  FLOATING PARTICLES (Site-wide)
   // ══════════════════════════════════════════════════════════════
-  const heroSection = document.querySelector('.hero');
-  if (heroSection && window.innerWidth > 768) {
+  {
     const particleContainer = document.createElement('div');
-    particleContainer.className = 'hero-particles';
-    heroSection.appendChild(particleContainer);
+    particleContainer.className = 'site-particles';
+    document.body.appendChild(particleContainer);
 
-    for (let i = 0; i < 25; i++) {
+    const count = window.innerWidth > 768 ? 50 : 24;
+    for (let i = 0; i < count; i++) {
       const particle = document.createElement('div');
       particle.className = 'particle';
-      particle.style.setProperty('--size', Math.random() * 3 + 1 + 'px');
-      particle.style.setProperty('--duration', Math.random() * 6 + 5 + 's');
-      particle.style.setProperty('--delay', Math.random() * 5 + 's');
-      particle.style.setProperty('--dx', (Math.random() - 0.5) * 150 + 'px');
-      particle.style.setProperty('--dy', -(Math.random() * 300 + 100) + 'px');
+      particle.style.setProperty('--size', Math.random() * 4 + 2 + 'px');
+      particle.style.setProperty('--duration', Math.random() * 8 + 6 + 's');
+      particle.style.setProperty('--delay', Math.random() * 8 + 's');
+      particle.style.setProperty('--dx', (Math.random() - 0.5) * 200 + 'px');
+      particle.style.setProperty('--dy', -(Math.random() * 400 + 150) + 'px');
       particle.style.left = Math.random() * 100 + '%';
-      particle.style.bottom = Math.random() * 30 + '%';
+      particle.style.bottom = Math.random() * 100 + '%';
       particleContainer.appendChild(particle);
     }
   }

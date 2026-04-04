@@ -76,6 +76,9 @@ node_modules/
 # Temp/tool-generated files
 chrome-crash/
 chrome-data/
+chrome-data-temp/
+chrome-data-temp-mobile/
+temp-ui-review/
 download_assets.js
 homepage.png
 

@@ -46,6 +46,11 @@
     <div class="curtain"></div><div class="curtain"></div><div class="curtain"></div><div class="curtain"></div><div class="curtain"></div>
   </div>
 
+  <!-- Preloader -->
+  <div class="preloader" id="preloader">
+    <span class="preloader-text">Headshots</span>
+  </div>
+
   <!-- Navigation -->
   <nav class="nav scrolled" id="navbar">
     <div class="nav-inner">
@@ -76,15 +81,14 @@
 
   <!-- Page Hero -->
   <section class="page-hero">
-    <span class="section-label">Portfolio</span>
     <h1 class="page-hero-title">Headshots</h1>
   </section>
 
   <!-- Headshots Gallery -->
   <section class="section">
-    <div class="section-wide">
-      <div class="gallery-grid">
-        <div class="gallery-item gallery-featured reveal reveal-delay-1" onclick="openLightbox(this)">
+    <div class="section-default" style="max-width: 700px; margin: 0 auto;">
+      <div class="gallery-grid" style="grid-template-columns: repeat(2, 1fr);">
+        <div class="gallery-item reveal reveal-delay-1" onclick="openLightbox(this)">
           <img src="assets/images/home/headshot-karen-scott.jpg" alt="Virginia Thorn Headshot — Photographer Karen Scott" loading="lazy">
           <div class="gallery-item-overlay">
             <span style="color: var(--color-text-primary); font-size: var(--fs-caption); letter-spacing: var(--ls-wide);">Photographer Karen Scott</span>
