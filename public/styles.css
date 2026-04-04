@@ -762,7 +762,7 @@ button {
    ═══════════════════════════════════════════════════════════════ */
 .gallery-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--space-md);
 }
 
@@ -772,6 +772,12 @@ button {
   border-radius: var(--radius-md);
   aspect-ratio: 3 / 4;
   cursor: pointer;
+}
+
+.gallery-item.gallery-featured {
+  grid-column: 1 / -1;
+  aspect-ratio: 4 / 3;
+  max-height: 70vh;
 }
 
 .gallery-item img {
@@ -1393,10 +1399,6 @@ button {
     grid-template-columns: 1fr;
   }
 
-  .gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
   .hero-title {
     font-size: clamp(2.5rem, 8vw, 4rem);
   }
@@ -1409,6 +1411,11 @@ button {
 @media (max-width: 480px) {
   .gallery-grid {
     grid-template-columns: 1fr;
+  }
+
+  .gallery-item.gallery-featured {
+    aspect-ratio: 3 / 4;
+    max-height: none;
   }
 
   .footer-social {
