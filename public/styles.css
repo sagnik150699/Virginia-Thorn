@@ -404,6 +404,7 @@ button {
   z-index: 2;
   text-align: center;
   padding: var(--space-lg);
+  padding-bottom: calc(var(--space-lg) + 80px);
   max-width: var(--max-width);
   margin-top: clamp(6rem, 18vh, 14rem);
 }
