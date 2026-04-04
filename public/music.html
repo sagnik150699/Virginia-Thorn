@@ -121,11 +121,20 @@
 
       <!-- Singing Showreel Audio -->
       <div class="reveal" style="margin-bottom: var(--space-2xl);">
-        <div class="audio-card" style="max-width: 600px; margin: 0 auto;">
-          <h4 class="audio-card-title">Singing Showreel</h4>
-          <audio controls preload="none" style="width: 100%;">
-            <source src="assets/audio/music/singing-showreel.mp3" type="audio/mpeg">
-          </audio>
+        <div class="audio-card vo-audio-card" data-src="assets/audio/music/singing-showreel.mp3" style="max-width: 600px; margin: 0 auto;">
+          <div class="custom-player">
+            <button class="player-btn" aria-label="Play Singing Showreel">
+              <svg class="player-icon-play" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+              <svg class="player-icon-pause" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="display:none"><rect x="5" y="3" width="4" height="18"/><rect x="15" y="3" width="4" height="18"/></svg>
+            </button>
+            <div class="player-info">
+              <h4 class="audio-card-title">Singing Showreel</h4>
+            </div>
+          </div>
+          <div class="player-track">
+            <div class="player-progress"><div class="player-progress-fill"></div></div>
+            <span class="player-time">0:00</span>
+          </div>
         </div>
       </div>
 

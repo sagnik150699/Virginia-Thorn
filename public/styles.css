@@ -1881,10 +1881,15 @@ button {
   .hero-content {
     flex: none;
     text-align: center;
-    margin-top: auto;
+    align-items: center;
+    margin: auto auto auto auto;
     padding: var(--space-lg);
-    padding-bottom: calc(var(--space-lg) + 120px);
     padding-top: 100px;
+    transform: translateY(-8vh);
+  }
+
+  .hero-scroll {
+    display: none;
   }
 
   .hero-subtitle {
@@ -2017,7 +2022,6 @@ button {
 
   .hero-content {
     padding: var(--space-md);
-    padding-bottom: calc(var(--space-md) + 100px);
     padding-top: 80px;
   }
 

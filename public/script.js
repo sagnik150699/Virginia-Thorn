@@ -39,8 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => preloader.remove(), 1000);
       }
     };
-    window.addEventListener('load', () => setTimeout(dismissPreloader, 1000));
-    setTimeout(dismissPreloader, 4000); // fallback
+    window.addEventListener('load', () => setTimeout(dismissPreloader, 400));
+    setTimeout(dismissPreloader, 2500); // fallback
   }
 
   // ══════════════════════════════════════════════════════════════
