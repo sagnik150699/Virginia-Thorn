@@ -1,35 +1,332 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://virginiathorn.com/</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-04-04</lastmod>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/hero-vthorn.jpg</image:loc>
+      <image:title>Virginia Thorn - Actor Singer Voice Over Artist</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/hero-wide.jpg</image:loc>
+      <image:title>Virginia Thorn - Hero Portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/bio-portrait.jpg</image:loc>
+      <image:title>Virginia Thorn - Bio Portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/quote-bg.jpg</image:loc>
+      <image:title>Virginia Thorn - Quote Background</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/savage-in-limbo.jpg</image:loc>
+      <image:title>Virginia Thorn - Savage In Limbo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/carousel-post.jpg</image:loc>
+      <image:title>Virginia Thorn - Pocket Of Light Theatre</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/headshot-1.jpg</image:loc>
+      <image:title>Virginia Thorn - Headshot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/portrait-5128.jpg</image:loc>
+      <image:title>Virginia Thorn - Portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/headshot-karen-scott.jpg</image:loc>
+      <image:title>Virginia Thorn - Headshot by Karen Scott</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/headshot-5487.jpg</image:loc>
+      <image:title>Virginia Thorn - Headshot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/headshot-dsc3292.jpg</image:loc>
+      <image:title>Virginia Thorn - Headshot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/headshot-dsc3534.jpg</image:loc>
+      <image:title>Virginia Thorn - Headshot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/headshot-5103.jpg</image:loc>
+      <image:title>Virginia Thorn - Headshot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/contact-wide.jpg</image:loc>
+      <image:title>Virginia Thorn - Contact</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://virginiathorn.com/bio.html</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-04-04</lastmod>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/bio-portrait.jpg</image:loc>
+      <image:title>Virginia Thorn - Bio Portrait</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://virginiathorn.com/reels.html</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-04-04</lastmod>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/reels/acting-showreel-thumb.png</image:loc>
+      <image:title>Virginia Thorn - Acting Showreel</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/reels/singing-showreel-thumb.png</image:loc>
+      <image:title>Virginia Thorn - Singing Showreel</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/reels/vo-reel-thumb.png</image:loc>
+      <image:title>Virginia Thorn - Voice Over Reel</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/reels/acting-showreel-2-thumb.png</image:loc>
+      <image:title>Virginia Thorn - Acting Showreel 2</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/reels/green-note-promo-thumb.png</image:loc>
+      <image:title>Virginia Thorn - Green Note Promo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/reels/call-it-home-thumb.png</image:loc>
+      <image:title>Virginia Thorn - Call It Home</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://virginiathorn.com/headshots.html</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-04-04</lastmod>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/headshot-1.jpg</image:loc>
+      <image:title>Virginia Thorn - Headshot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/portrait-5128.jpg</image:loc>
+      <image:title>Virginia Thorn - Portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/headshot-karen-scott.jpg</image:loc>
+      <image:title>Virginia Thorn - Headshot by Karen Scott</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/headshot-5487.jpg</image:loc>
+      <image:title>Virginia Thorn - Headshot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/headshot-dsc3292.jpg</image:loc>
+      <image:title>Virginia Thorn - Headshot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/headshot-dsc3534.jpg</image:loc>
+      <image:title>Virginia Thorn - Headshot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/headshot-5103.jpg</image:loc>
+      <image:title>Virginia Thorn - Headshot</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://virginiathorn.com/music.html</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-04-04</lastmod>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/music/green-note.jpg</image:loc>
+      <image:title>Virginia Thorn - Green Note Performance</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/music/publicity-rosalind-hobley.jpg</image:loc>
+      <image:title>Virginia Thorn - Publicity Photo by Rosalind Hobley</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/music/the-hideaway.jpg</image:loc>
+      <image:title>Virginia Thorn - The Hideaway Performance</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/music/lancaster-music-festival.jpg</image:loc>
+      <image:title>Virginia Thorn - Lancaster Music Festival</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/music/ginny-screenshot.jpg</image:loc>
+      <image:title>Virginia Thorn - Music Performance</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://virginiathorn.com/voiceover.html</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-04-04</lastmod>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/voiceover/emmy-award.jpeg</image:loc>
+      <image:title>Virginia Thorn - Emmy Award Winning Production</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/voiceover/sennheiser-mic.jpg</image:loc>
+      <image:title>Virginia Thorn - Voice Over Studio</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/voiceover/redbridge-community.jpg</image:loc>
+      <image:title>Virginia Thorn - Redbridge Community Voice Over</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/voiceover/vocal-mic.jpg</image:loc>
+      <image:title>Virginia Thorn - Vocal Microphone</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/voiceover/vo-bio-image.png</image:loc>
+      <image:title>Virginia Thorn - Voice Over Bio</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://virginiathorn.com/projects.html</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-04-04</lastmod>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/savage-limbo-project.jpg</image:loc>
+      <image:title>Virginia Thorn - Savage In Limbo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/nhs-roleplay.jpeg</image:loc>
+      <image:title>Virginia Thorn - NHS Medical Simulation</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/in-your-dreams-1.jpg</image:loc>
+      <image:title>Virginia Thorn - In Your Dreams</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/truth-lies-1.png</image:loc>
+      <image:title>Virginia Thorn - Truth and Lies</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/out-of-this-world-1.jpg</image:loc>
+      <image:title>Virginia Thorn - Out Of This World</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/kindertransport-1.jpg</image:loc>
+      <image:title>Virginia Thorn - Kindertransport</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://virginiathorn.com/contact.html</loc>
-    <lastmod>2026-04-03</lastmod>
+    <lastmod>2026-04-04</lastmod>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/home/contact-wide.jpg</image:loc>
+      <image:title>Virginia Thorn - Contact</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://virginiathorn.com/projects/arts-council.html</loc>
+    <lastmod>2026-04-04</lastmod>
+  </url>
+  <url>
+    <loc>https://virginiathorn.com/projects/savage-in-limbo.html</loc>
+    <lastmod>2026-04-04</lastmod>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/savage-limbo-project.jpg</image:loc>
+      <image:title>Virginia Thorn - Savage In Limbo at The Lantern Theatre</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://virginiathorn.com/projects/nhs-roleplay.html</loc>
+    <lastmod>2026-04-04</lastmod>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/nhs-roleplay.jpeg</image:loc>
+      <image:title>Virginia Thorn - NHS Medical Simulation Role Play</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://virginiathorn.com/projects/in-your-dreams.html</loc>
+    <lastmod>2026-04-04</lastmod>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/in-your-dreams-1.jpg</image:loc>
+      <image:title>Virginia Thorn - In Your Dreams at Komedia</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/in-your-dreams-2.jpg</image:loc>
+      <image:title>Virginia Thorn - In Your Dreams Production Photo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/in-your-dreams-3.jpg</image:loc>
+      <image:title>Virginia Thorn - In Your Dreams Production Photo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/in-your-dreams-4.jpg</image:loc>
+      <image:title>Virginia Thorn - In Your Dreams Production Photo</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://virginiathorn.com/projects/truth-lies.html</loc>
+    <lastmod>2026-04-04</lastmod>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/truth-lies-1.png</image:loc>
+      <image:title>Virginia Thorn - Truth and Lies at Komedia</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/truth-lies-2.jpg</image:loc>
+      <image:title>Virginia Thorn - Truth and Lies Production Photo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/truth-lies-3.jpg</image:loc>
+      <image:title>Virginia Thorn - Truth and Lies Production Photo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/truth-lies-4.jpg</image:loc>
+      <image:title>Virginia Thorn - Truth and Lies Production Photo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/truth-lies-5.jpg</image:loc>
+      <image:title>Virginia Thorn - Truth and Lies Production Photo</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://virginiathorn.com/projects/out-of-this-world.html</loc>
+    <lastmod>2026-04-04</lastmod>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/out-of-this-world-1.jpg</image:loc>
+      <image:title>Virginia Thorn - Out Of This World at Komedia</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/out-of-this-world-2.jpg</image:loc>
+      <image:title>Virginia Thorn - Out Of This World Production Photo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/out-of-this-world-3.jpg</image:loc>
+      <image:title>Virginia Thorn - Out Of This World Production Photo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/out-of-this-world-4.jpg</image:loc>
+      <image:title>Virginia Thorn - Out Of This World Production Photo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/out-of-this-world-5.jpg</image:loc>
+      <image:title>Virginia Thorn - Out Of This World Production Photo</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://virginiathorn.com/projects/kindertransport.html</loc>
+    <lastmod>2026-04-04</lastmod>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/kindertransport-1.jpg</image:loc>
+      <image:title>Virginia Thorn - Kindertransport at South London Theatre</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/kindertransport-2.jpg</image:loc>
+      <image:title>Virginia Thorn - Kindertransport Production Photo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/kindertransport-3.jpg</image:loc>
+      <image:title>Virginia Thorn - Kindertransport Production Photo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/kindertransport-4.jpg</image:loc>
+      <image:title>Virginia Thorn - Kindertransport Production Photo</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://virginiathorn.com/assets/images/projects/kindertransport-5.jpg</image:loc>
+      <image:title>Virginia Thorn - Kindertransport Production Photo</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://virginiathorn.com/projects/philips-hue.html</loc>
+    <lastmod>2026-04-04</lastmod>
   </url>
 </urlset>
