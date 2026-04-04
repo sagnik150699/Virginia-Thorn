@@ -405,7 +405,7 @@ button {
   text-align: center;
   padding: var(--space-lg);
   max-width: var(--max-width);
-  margin-top: clamp(3.5rem, 8vh, 6rem);
+  margin-top: clamp(6rem, 18vh, 14rem);
 }
 
 .hero-subtitle {
@@ -709,6 +709,33 @@ button {
   padding: var(--space-3xl) var(--space-lg);
   text-align: center;
   overflow: hidden;
+}
+
+.quote-section--split {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  padding: 0;
+  min-height: 500px;
+}
+
+.quote-portrait {
+  flex: 0 0 45%;
+  height: 500px;
+  overflow: hidden;
+}
+
+.quote-portrait img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  filter: brightness(0.8);
+}
+
+.quote-section--split .quote-content {
+  flex: 1;
+  padding: var(--space-3xl) var(--space-2xl);
 }
 
 .quote-bg {
@@ -1404,7 +1431,7 @@ button {
   }
 
   .hero-content {
-    margin-top: clamp(2rem, 6vh, 3.5rem);
+    margin-top: clamp(4rem, 12vh, 8rem);
   }
 }
 
@@ -1479,6 +1506,14 @@ button {
   border: 1px solid rgba(212, 168, 83, 0.1);
   border-radius: var(--radius-lg);
   padding: var(--space-2xl) var(--space-xl);
+}
+
+.quote-section--split .quote-content {
+  background: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: none;
+  border-radius: 0;
 }
 
 .quote-text {
@@ -1936,6 +1971,22 @@ button {
   .cursor-dot,
   .cursor-ring {
     display: none !important;
+  }
+
+  .quote-section--split {
+    flex-direction: column;
+    min-height: auto;
+  }
+
+  .quote-portrait {
+    flex: none;
+    width: 100%;
+    height: 300px;
+  }
+
+  .quote-section--split .quote-content {
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
   }
 
   .quote-content {
