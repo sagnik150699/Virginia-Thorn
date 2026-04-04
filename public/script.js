@@ -265,7 +265,7 @@ document.addEventListener('DOMContentLoaded', () => {
       particle.className = 'particle';
       particle.style.setProperty('--size', Math.random() * 4 + 2 + 'px');
       particle.style.setProperty('--duration', Math.random() * 8 + 6 + 's');
-      particle.style.setProperty('--delay', Math.random() * 8 + 's');
+      particle.style.setProperty('--delay', (i < 8 ? Math.random() * 0.3 : Math.random() * 8) + 's');
       particle.style.setProperty('--dx', (Math.random() - 0.5) * 200 + 'px');
       particle.style.setProperty('--dy', -(Math.random() * 400 + 150) + 'px');
       particle.style.left = Math.random() * 100 + '%';
