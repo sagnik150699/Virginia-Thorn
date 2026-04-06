@@ -2371,8 +2371,8 @@ animation: particleDrift var(--duration, 8s) var(--delay, 0s) ease-in-out infini
 
 @keyframes particleDrift {
   0% { opacity: 0; transform: translate(0, 0) scale(0); }
-  5% { opacity: 0.9; }
-  85% { opacity: 0.9; }
+  10% { opacity: 0.8; }
+  85% { opacity: 0.8; }
   100% { opacity: 0; transform: translate(var(--dx, 50px), var(--dy, -200px)) scale(1); }
 }
 
