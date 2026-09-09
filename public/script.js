@@ -76,9 +76,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // ══════════════════════════════════════════════════════════════
   //  ACTIVE NAV LINK HIGHLIGHTING
   // ══════════════════════════════════════════════════════════════
-  const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+  // Compare without the .html suffix so Firebase clean URLs (/bio) still match "bio.html"
+  const pageKey = (s) => (s || '').split('/').pop().replace(/\.html$/, '') || 'index';
+  const currentPage = pageKey(window.location.pathname);
   document.querySelectorAll('.nav-link').forEach(link => {
-    if (link.getAttribute('href') === currentPage) link.classList.add('active');
+    if (pageKey(link.getAttribute('href')) === currentPage) link.classList.add('active');
   });
 
   // ══════════════════════════════════════════════════════════════
@@ -440,7 +442,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function openLightbox(el) {
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightboxImg');
-  const img = el.querySelector('img');
+  const img = el.tagName === 'IMG' ? el : el.querySelector('img');
   if (lightbox && lightboxImg && img) {
     lightboxImg.src = img.src;
     lightboxImg.alt = img.alt;

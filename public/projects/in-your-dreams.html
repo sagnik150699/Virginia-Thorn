@@ -56,7 +56,7 @@
           <span class="project-tag">New Original Work</span>
         </div>
 
-        <div class="project-detail-hero reveal">
+        <div class="project-detail-hero reveal" onclick="openLightbox(this)">
           <img src="../assets/images/projects/in-your-dreams-1.jpg" alt="In Your Dreams at Komedia">
         </div>
 
@@ -67,9 +67,9 @@
         </div>
 
         <div class="project-detail-gallery reveal">
-          <img src="../assets/images/projects/in-your-dreams-2.jpg" alt="In Your Dreams production photo">
-          <img src="../assets/images/projects/in-your-dreams-3.jpg" alt="In Your Dreams production photo">
-          <img src="../assets/images/projects/in-your-dreams-4.jpg" alt="In Your Dreams production photo">
+          <img onclick="openLightbox(this)" loading="lazy" src="../assets/images/projects/in-your-dreams-2.jpg" alt="In Your Dreams production photo">
+          <img onclick="openLightbox(this)" loading="lazy" src="../assets/images/projects/in-your-dreams-3.jpg" alt="In Your Dreams production photo">
+          <img onclick="openLightbox(this)" loading="lazy" src="../assets/images/projects/in-your-dreams-4.jpg" alt="In Your Dreams production photo">
         </div>
 
         <a href="../projects.html" class="project-detail-back">&larr; All Projects</a>
@@ -81,11 +81,17 @@
     <div class="footer-inner">
       <a href="../index.html" class="nav-logo">Virginia Thorn</a>
       <div class="footer-social">
-        <a href="https://app.spotlight.com/2378-4534-1999" target="_blank">spotlight</a><span class="footer-social-divider">|</span><a href="https://www.imdb.com/name/nm2342284/" target="_blank">imdb</a><span class="footer-social-divider">|</span><a href="https://www.youtube.com/channel/UCLiNj67wFo1XaHqo8nef8YA" target="_blank">youtube</a><span class="footer-social-divider">|</span><a href="https://www.instagram.com/virginiathorn_on_insta/" target="_blank">instagram</a><span class="footer-social-divider">|</span><a href="https://twitter.com/virginia_thorn" target="_blank">twitter</a>
+        <a href="https://app.spotlight.com/2378-4534-1999" target="_blank" rel="noopener">spotlight</a><span class="footer-social-divider">|</span><a href="https://www.imdb.com/name/nm2342284/" target="_blank" rel="noopener">imdb</a><span class="footer-social-divider">|</span><a href="https://www.youtube.com/channel/UCLiNj67wFo1XaHqo8nef8YA" target="_blank" rel="noopener">youtube</a><span class="footer-social-divider">|</span><a href="https://www.instagram.com/virginiathorn_on_insta/" target="_blank" rel="noopener">instagram</a><span class="footer-social-divider">|</span><a href="https://twitter.com/virginia_thorn" target="_blank" rel="noopener">twitter</a>
       </div>
       <p class="footer-copy">&copy; 2026 Virginia Thorn &middot; Made by <a href="https://sagnikbhattacharya.com" target="_blank" rel="noopener">Sagnik Bhattacharya</a></p>
     </div>
   </footer>
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" aria-label="Close lightbox">&times;</button>
+    <img src="" alt="" id="lightboxImg">
+  </div>
+
   <script src="../script.js"></script>
 </body>
 </html>

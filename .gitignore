@@ -86,3 +86,14 @@ homepage.png
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# Secrets & credentials (never commit these, even by accident)
+.env.*
+!.env.example
+*.pem
+*.p12
+*.key
+*service-account*.json
+*serviceAccount*.json
+*firebase-adminsdk*.json
+*.firebase-service-account*

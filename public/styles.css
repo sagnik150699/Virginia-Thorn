@@ -258,6 +258,7 @@ button {
   color: var(--color-text-primary);
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
+  white-space: nowrap;
   transition: color var(--transition-fast);
 }
 
@@ -279,6 +280,7 @@ button {
   text-transform: uppercase;
   position: relative;
   padding: var(--space-xs) 0;
+  white-space: nowrap;
   transition: color var(--transition-fast);
 }
 
@@ -726,6 +728,22 @@ button {
   gap: 12px;
 }
 
+/* Grid cards: stretch to the row height and pin the link to the bottom edge */
+.news-card:not(.news-card--featured) {
+  display: flex;
+  flex-direction: column;
+}
+
+.news-card:not(.news-card--featured) .news-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.news-card:not(.news-card--featured) .news-card-link {
+  margin-top: auto;
+}
+
 /* ═══════════════════════════════════════════════════════════════
    BIO SECTION
    ═══════════════════════════════════════════════════════════════ */
@@ -738,6 +756,7 @@ button {
 
 .bio-image-wrapper {
   position: relative;
+  isolation: isolate;
 }
 
 .bio-image-sticky {
@@ -855,7 +874,7 @@ button {
 }
 
 .quote-text::before {
-  content: '"';
+  content: '\201C';
   display: block;
   font-size: 4rem;
   color: var(--color-accent);
@@ -881,6 +900,11 @@ button {
 
 .gallery-grid--three {
   grid-template-columns: repeat(3, 1fr);
+}
+
+/* Two-up gallery (headshots page) - stays two-up on phones, portraits read well at that size */
+.gallery-grid--two {
+  grid-template-columns: repeat(2, 1fr);
 }
 
 .gallery-credit {
@@ -1022,6 +1046,8 @@ button {
 .music-link-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   gap: var(--space-xs);
   padding: var(--space-sm) var(--space-lg);
   border: 1px solid var(--color-accent);
@@ -1408,14 +1434,19 @@ button {
 
 .project-detail-hero {
   margin-bottom: var(--space-xl);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .project-detail-hero img {
-  width: 100%;
+  width: auto;
+  max-width: 100%;
+  max-height: 640px;
   height: auto;
   display: block;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
 }
 
 .project-detail-body {
@@ -1457,9 +1488,12 @@ button {
 
 .project-detail-gallery img {
   width: 100%;
-  height: 250px;
+  aspect-ratio: 4 / 5;
+  height: auto;
   object-fit: cover;
+  object-position: top center;
   border-radius: var(--radius-md);
+  cursor: pointer;
   transition: transform var(--transition-slow);
 }
 
@@ -1486,11 +1520,7 @@ button {
 
 @media (max-width: 768px) {
   .project-detail-gallery {
-    grid-template-columns: 1fr;
-  }
-
-  .project-detail-gallery img {
-    height: 200px;
+    gap: var(--space-sm);
   }
 }
 
@@ -1553,6 +1583,23 @@ button {
   box-shadow: var(--shadow-md);
 }
 
+.contact-connect {
+  margin-top: var(--space-2xl);
+}
+
+.contact-connect-title {
+  font-family: var(--font-display);
+  font-size: var(--fs-h3);
+  font-weight: 400;
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-md);
+}
+
+.contact-connect-links {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
 .contact-form {
   display: flex;
   flex-direction: column;
@@ -1576,7 +1623,7 @@ button {
 .form-group textarea {
   width: 100%;
   padding: var(--space-sm);
-  background: var(--color-bg-card);
+  background: var(--color-bg-primary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   color: var(--color-text-primary);
@@ -1607,6 +1654,7 @@ button {
   border-radius: var(--radius-sm);
   transition: all var(--transition-base);
   align-self: flex-start;
+  white-space: nowrap;
 }
 
 .form-submit:hover {
@@ -1700,14 +1748,14 @@ button {
 }
 
 .footer-copy a:hover {
-  color: var(--color-text);
+  color: var(--color-accent);
 }
 
 /* ═══════════════════════════════════════════════════════════════
    PAGE HERO (for sub-pages)
    ═══════════════════════════════════════════════════════════════ */
 .page-hero {
-  padding: calc(var(--space-md) + 70px) var(--space-lg) var(--space-sm);
+  padding: calc(var(--space-xl) + 80px) var(--space-lg) var(--space-xl);
   text-align: center;
   background: var(--color-bg-secondary);
   border-bottom: 1px solid var(--color-border);
@@ -1729,7 +1777,7 @@ button {
 
 .page-hero-title {
   font-family: var(--font-display);
-  font-size: var(--fs-h3);
+  font-size: var(--fs-h2);
   font-weight: 300;
   color: var(--color-text-primary);
   letter-spacing: var(--ls-wide);
@@ -1745,6 +1793,11 @@ button {
 /* Tighten gap between page hero and first content section */
 .page-hero + .section {
   padding-top: var(--space-xl);
+}
+
+/* A CTA inside a centred page hero (404) should sit on the centre line */
+.page-hero .hero-cta {
+  align-self: center;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1801,6 +1854,12 @@ button {
 /* ═══════════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 1180px) {
+  .news-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
 @media (max-width: 1024px) {
   .bio-layout {
     grid-template-columns: 1fr;
@@ -1813,7 +1872,8 @@ button {
   }
 
   .project-card {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(200px, 38%) 1fr;
+    gap: var(--space-md);
   }
 
   .contact-layout {
@@ -1829,7 +1889,25 @@ button {
   }
 }
 
-@media (max-width: 768px) {
+/* Tablet: keep the full menu but tighten it so nothing wraps or clips */
+@media (max-width: 1100px) {
+  .nav-links {
+    gap: var(--space-md);
+  }
+
+  .nav-link {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+  }
+
+  .hero-content {
+    padding: var(--space-xl);
+    padding-top: 14%;
+  }
+}
+
+/* Below 960px the seven links no longer fit beside the logo: switch to the menu */
+@media (max-width: 960px) {
   .nav-links {
     display: none;
   }
@@ -1841,7 +1919,9 @@ button {
   .nav-mobile {
     display: flex;
   }
+}
 
+@media (max-width: 768px) {
   .section {
     padding: var(--space-2xl) var(--space-md);
   }
@@ -1852,6 +1932,10 @@ button {
 
   .reels-grid {
     grid-template-columns: 1fr;
+  }
+
+  .music-hero {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .reel-card-body {
@@ -1999,10 +2083,30 @@ button {
   }
 }
 
+@media (max-width: 640px) {
+  .project-card {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .project-card-image {
+    aspect-ratio: 1 / 1;
+  }
+
+  .project-card-content {
+    padding: var(--space-md);
+  }
+}
+
 @media (max-width: 480px) {
   .gallery-grid,
   .gallery-grid--three {
     grid-template-columns: 1fr;
+  }
+
+  .gallery-grid--two {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
   }
 
   .gallery-item {
@@ -2017,10 +2121,6 @@ button {
   .footer-social {
     flex-wrap: wrap;
     justify-content: center;
-  }
-
-  .vo-grid {
-    grid-template-columns: 1fr;
   }
 
   .vo-info-grid {
@@ -2085,6 +2185,14 @@ button {
   .footer-copy {
     font-size: 0.7rem;
   }
+
+  .contact-form {
+    padding: var(--space-lg) var(--space-md);
+  }
+
+  .page-hero {
+    padding: calc(var(--space-xl) + 56px) var(--space-md) var(--space-lg);
+  }
 }
 
 @media (max-width: 768px) {
@@ -2100,6 +2208,11 @@ button {
 
   .vo-grid {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .vo-grid .vo-image-card:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    aspect-ratio: 2 / 1;
   }
 }
 
@@ -2594,8 +2707,8 @@ animation: particleDrift var(--duration, 8s) var(--delay, 0s) ease-in-out infini
    FOOTER ENTRANCE
    ═══════════════════════════════════════════════════════════════ */
 .footer .nav-logo,
-.footer-social,
-.footer-copy {
+.footer .footer-social,
+.footer .footer-copy {
   opacity: 0;
   transform: translateY(15px);
 }
