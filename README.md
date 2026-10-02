@@ -4,6 +4,8 @@ A fast, static portfolio website built for **Virginia Thorn** — a Meisner-trai
 
 The site is fully responsive, dependency-free (no complex bundlers or frameworks), and designed for quick loading with elegant, modern interactions.
 
+![Homepage hero: a stage photo of Virginia Thorn beside her name, tagline and a Discover More button](docs/screenshots/01-home.jpg)
+
 ## 🚀 Live Demo
 [virginiathorn.com](https://virginiathorn.com)
 
@@ -13,6 +15,59 @@ The site is fully responsive, dependency-free (no complex bundlers or frameworks
 * **Comprehensive Portfolio:** Includes dedicated pages for Bio, Reels, Headshots, Music, Voice Over, and Featured Projects.
 * **Lightweight & Fast:** Built entirely with plain HTML, CSS, and Vanilla JavaScript. No heavy frontend frameworks or build steps required.
 * **Self-Hosted Assets:** All fonts, images, and audio are hosted locally within the project to ensure structural independence.
+
+## 📸 Screenshots
+
+Desktop views at 1440 × 900, mobile views at 390 × 844. Click any image for the full-size version.
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/02-featured-projects.jpg" alt="Homepage Featured Projects section: a large 'Savage In Limbo' news card above a row of smaller project cards" width="100%">
+      <p align="center"><b>Featured Projects</b><br><sub>Homepage news cards</sub></p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/03-biography.jpg" alt="Biography page: a framed portrait beside the introduction, with gold inline links" width="100%">
+      <p align="center"><b>Biography</b><br><sub>Portrait and bio with inline links</sub></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/04-headshots-lightbox.jpg" alt="Headshots page with one portrait enlarged in the lightbox" width="100%">
+      <p align="center"><b>Headshots</b><br><sub>Click-to-enlarge lightbox</sub></p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/05-music.jpg" alt="Music page: a strip of four live performance photos above the Listen heading and two album links" width="100%">
+      <p align="center"><b>Music</b><br><sub>Performance photos and album links</sub></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/06-voice-over.jpg" alt="Voice Over showreels: four custom audio player cards, the first playing with its progress bar part-filled" width="100%">
+      <p align="center"><b>Voice Over</b><br><sub>Custom audio players, one mid-playback</sub></p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/07-projects.jpg" alt="Projects page opening with the Arts Council England funding announcement card" width="100%">
+      <p align="center"><b>Projects</b><br><sub>Tagged project cards</sub></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/08-project-detail.jpg" alt="Savage In Limbo project page: a stage photo above the project headline" width="100%">
+      <p align="center"><b>Project Page</b><br><sub>Savage In Limbo detail page</sub></p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="docs/screenshots/09-contact.jpg" alt="Contact page: a portrait beside the name, email, subject and message form" width="100%">
+      <p align="center"><b>Contact</b><br><sub>Portrait and contact form</sub></p>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2" valign="top">
+      <img src="docs/screenshots/10-mobile.jpg" alt="Three phone-width screens: the homepage hero, the open navigation menu, and a project card" width="100%">
+      <p align="center"><b>Mobile</b><br><sub>Homepage, menu overlay and a project card at phone width</sub></p>
+    </td>
+  </tr>
+</table>
 
 ## 🛠️ Tech Stack
 * **Core:** HTML5, CSS3, Vanilla JS
@@ -36,6 +91,8 @@ public/
 ├── script.js          # Interactions (Lightbox, Navigation, etc.)
 ├── styles.css         # Global styles
 └── voiceover.html     # Voiceover samples
+docs/
+└── screenshots/       # README screenshots (not deployed)
 firebase.json          # Firebase Hosting configuration
 .firebaserc            # Firebase project alias
 ```

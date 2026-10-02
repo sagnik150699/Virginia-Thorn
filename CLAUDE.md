@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-Static portfolio site for actor/singer/voice-over artist Virginia Thorn. Plain HTML, one CSS file, one JS file, self-hosted fonts/images/audio. No framework, no bundler, no package.json, no tests, no linter. Everything that ships lives in `public/`; the repo root only holds Firebase config, the deploy workflow, README and LICENSE (all rights reserved, the copy and media belong to the client).
+Static portfolio site for actor/singer/voice-over artist Virginia Thorn. Plain HTML, one CSS file, one JS file, self-hosted fonts/images/audio. No framework, no bundler, no package.json, no tests, no linter. Everything that ships lives in `public/`; the repo root only holds Firebase config, the deploy workflow, README (its screenshots live in `docs/screenshots/` and are not deployed) and LICENSE (all rights reserved, the copy and media belong to the client).
 
 ## Commands
 
@@ -56,7 +56,7 @@ Several classes start at `opacity: 0` and only become visible when something els
 - `.footer .nav-logo`, `.footer .footer-social`, `.footer .footer-copy` animate only under `.footer.visible`.
 - `.page-hero-title` and `.page-hero .section-label` animate purely in CSS on load.
 
-Reusing one of these classes outside its trigger leaves the element permanently invisible (this happened with `.footer-social` on the contact page). The `prefers-reduced-motion` block forces everything visible, which is also the trick for honest headless screenshots: plain `chrome --headless --screenshot` captures titles and reveals at opacity 0 and stretches the `100vh` hero to the window height, so emulate reduced motion, wait for `.preloader.hidden`, scroll through the page, then take a full-page shot (puppeteer-core with the installed Chrome works).
+Reusing one of these classes outside its trigger leaves the element permanently invisible (this happened with `.footer-social` on the contact page). The `prefers-reduced-motion` block forces everything visible, which is also the trick for honest headless screenshots: plain `chrome --headless --screenshot` captures titles and reveals at opacity 0 and stretches the `100vh` hero to the window height, so emulate reduced motion, wait for `.preloader.hidden`, scroll through the page, then take a full-page shot (puppeteer-core with the installed Chrome works). The README screenshots were captured with motion left on instead: Playwright at 1440×900 and 2× scale, scroll through to fire every reveal, then `finish()` each finite entry of `document.getAnimations()` (the particle loops are infinite). `python -m http.server` ignores Range requests, so the audio players cannot seek under it; `npx http-server public` can.
 
 ### script.js feature modules and the markup they expect
 
