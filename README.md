@@ -6,8 +6,6 @@ The site is fully responsive, dependency-free (no complex bundlers or frameworks
 
 ![Homepage hero: a stage photo of Virginia Thorn beside her name, tagline and a Discover More button](docs/screenshots/01-home.jpg)
 
-## 🚀 Live Demo
-[virginiathorn.com](https://virginiathorn.com)
 
 ## ✨ Features
 * **Modern Aesthetic:** Clean, minimalist design with smooth scroll animations.
