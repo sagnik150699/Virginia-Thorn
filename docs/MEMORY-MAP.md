@@ -26,7 +26,7 @@ There is no bundler or test suite; `package.json` exists only for the optional l
 | `index.html` | Home. The only page with the split `.hero` and a nav that starts transparent. |
 | `bio`, `reels`, `headshots`, `music`, `voiceover`, `projects`, `contact` | The seven menu sections (`.html`). |
 | `privacy.html` | The privacy policy: indexed and in the sitemap, linked from every footer, not in the menu. |
-| `best-voice-over-artist-uk.html` | Standalone landing page for UK voice-over search (see "Landing page for UK voice-over search"). |
+| `best-voice-over-artist-uk.html` | Landing page for UK voice-over search (see "Landing page for UK voice-over search"). |
 | `projects/*.html` | Eight project pages: `arts-council`, `in-your-dreams`, `kindertransport`, `nhs-roleplay`, `out-of-this-world`, `philips-hue`, `savage-in-limbo`, `truth-lies`. They sit one folder down, so every asset, stylesheet and script path starts with `../`. |
 | `cv.html` | Noindex, disallowed in `robots.txt`, linked from no page and left out of the sitemap. |
 | `404.html` | Noindex. Firebase serves it for any unknown address, in any folder, so all its paths are root-relative (`/styles.css`, `/script.js`, `/index.html` and so on). |
@@ -41,7 +41,7 @@ Other files in `public/`: `styles.css` and `script.js` (the only stylesheet and 
 
 ## Page chrome, copied by hand into every page
 
-Every page except the standalone landing page repeats the same frame, in this order (where a part is missing on some pages, it says so):
+Every page, the landing page included since 2026-11-03, repeats the same frame, in this order (where a part is missing on some pages, it says so):
 
 1. `<head>`: title, favicons, font preloads (`font-10.woff2`, Cormorant Garamond, and `font-17.woff2`, Inter; the home page also preloads `font-05.woff2`, the Cormorant italic), `assets/fonts/fonts.css`, then `styles.css`, plus SEO tags that vary by page: description, canonical and Open Graph on every public page; Twitter tags and JSON-LD structured data on the home page, the seven sections and `privacy.html`; a robots tag on the top-level pages; keywords on the home page only. `404.html` and `cv.html` have no canonical or sharing tags. If the font files change, update the preload links together with `fonts.css`.
 2. `.page-transition` (five `.curtain` divs), then `#preloader`, which `404.html` and the project pages do not have.
@@ -58,6 +58,7 @@ So a change to the nav, footer or head meta means editing all 19 framed pages, a
 
 `best-voice-over-artist-uk.html` (2026-11-03) is a standalone page written for "best voice over artist UK" searches and AI answers: why a real voice-over artist beats AI voices, with a button to contact her directly.
 It is in `sitemap.xml` and `llms.txt` but deliberately not linked from the nav or footer; keep it that way unless Virginia asks.
+Since 2026-11-03 it carries the normal site frame (nav, footer, cookie banner), opens with a two-column hero (copy left, the Karen Scott headshot right, stacked on phones), has three more photos further down, and its two gold "Connect with Virginia" buttons go to `contact.html`. Its copy must stay word for word (it was written for AI search engines); only the delivery-time promises were removed, because they cannot be met.
 
 ## styles.css: two layers plus the privacy section, and source order matters
 
@@ -97,7 +98,7 @@ Markup contracts:
 
 - **Audio player** (`voiceover.html`, `music.html`): `.audio-card.vo-audio-card[data-src="…mp3"]` containing `.player-btn` with `.player-icon-play` and `.player-icon-pause`, `.player-progress > .player-progress-fill`, and `.player-time`; the card title is an `h3` (`.audio-card-title`). The audio object is created on first use with `preload = 'none'`; starting one card stops any other.
 - **Lightbox** (home, headshots, music and six project pages): inline `onclick="openLightbox(this)"`, where the argument is the `<img>` or a wrapper containing one; clicking the overlay (`onclick="closeLightbox()"`) or pressing Escape closes it. A page that uses it must include the `#lightbox` / `#lightboxImg` markup before `script.js`.
-- **Contact form** (`contact.html`): markup only, with no `<form>` element, no action and no backend, so the button does nothing. Bookings go through the Spotlight link.
+- **Contact form** (`contact.html`): markup only, with no `<form>` element, no action and no backend, so the button does nothing. Since 2026-11-03 the landing page's buttons send visitors here, so the backend (see the Open tasks in WEBSITE-PREFERENCES.md) is urgent.
 
 ## Privacy, cookies and analytics
 

@@ -5,7 +5,7 @@ What the owner wants from the site: content, design, SEO and privacy decisions, 
 ## Owner and audience
 
 - The site belongs to Virginia Thorn, actor, singer and voice-over artist, based in London and East Sussex.
-- Visitors who want to book her are sent to her Spotlight profile.
+- Visitors who want to book her are sent to the contact page: since 2026-11-03 the landing page's two "Connect with Virginia" buttons go to `contact.html`, not to Spotlight (Sagnik's decision), so the contact form backend in Open tasks is now the main booking route.
 - Virginia develops the site herself through Claude Code and does not write code. Any kind of change is open to her, from wording to design, new pages and new features; Claude does the technical work, explains each change in plain words and asks her whenever there is a real choice to make.
 - Sagnik Bhattacharya built the site; at the November 2026 handover every account behind it passes to Virginia (see "Accounts you own" in `docs/GETTING-STARTED.md`).
 
@@ -14,6 +14,7 @@ What the owner wants from the site: content, design, SEO and privacy decisions, 
 - Claude never deletes or rewords Virginia's copy, credits, images or links on its own; what they say is hers to decide, and changing them is fine when she asks.
 - 2026-11-03, Sagnik: the content-preservation deploy gate (the former check e and the `[allow-removals]` marker) was removed, because Virginia edits her own content freely and must never be blocked by it. The private-data check stays: when it fires, Claude asks Virginia and allow-lists only what she approves.
 - Standalone pages made for search, such as the UK voice-over landing page, stay out of the nav and footer unless Virginia asks.
+- 2026-11-03, Sagnik: the landing page's copy stays word for word as written, because it was written for AI search engines. The only text changes allowed were removing the 24-48 hour and same-day delivery promises, which Virginia cannot meet, and shortening the closing button label to "Connect with Virginia →".
 - Wherever the copy names Coding Liquids, the name links to https://codingliquids.com.
 - The sentence about the e-learning courses she voices (home and bio pages) links to her Udemy profile, https://www.udemy.com/user/virginiathorn/, next to the Coding Liquids link; `llms.txt` lists both.
 
@@ -58,8 +59,9 @@ This is the site's one to-do list, shared between PCs through git (until the Nov
 - [ ] **Point virginiathorn.com at Firebase Hosting. Urgent:** since 2026-11-03 the old Squarespace site shows a "Website Expired" page, so the domain shows nothing of Virginia's work.
 - [ ] **Google Analytics (Virginia):** create or find the GA4 property and paste its Measurement ID (looks like G-XXXXXXXXXX) into `ANALYTICS_MEASUREMENT_ID` at the top of `public/script.js`; until then the banner shows but nothing is tracked. The old Squarespace site has expired, so its ID could not be read from it.
 - [ ] **Contact form backend:** `contact.html` is markup only, so the form sends nothing yet. Plan: a Firebase Cloud Function receives the form, Cloudflare Turnstile keeps bots out, and messages are delivered to Virginia's email; the email provider is still to choose. Build it once Virginia approves the receiving address, and keep that address out of the repo.
-  - When the form works, point the primary "Connect with Virginia" button on `public/best-voice-over-artist-uk.html` at `contact.html`; today it goes to her Spotlight profile because the form sends nothing.
+  - The two "Connect with Virginia" buttons on `public/best-voice-over-artist-uk.html` already point at `contact.html` (changed 2026-11-03 at Sagnik's request), so visitors land on a form that sends nothing until this is built: treat it as urgent.
 - [ ] **After the DNS switch:** confirm the site in Google Search Console, submit `sitemap.xml`, and check that the landing page `best-voice-over-artist-uk.html` is indexed.
+- [ ] **Photo credit on the landing page (Virginia):** its hero now shows the Karen Scott headshot that other pages credit; decide whether the landing page should carry the credit too (it means adding a line of text to the page).
 - [ ] **Optional performance work:** responsive and WebP images. (Font preloads were added on 2026-11-03.)
 - [ ] **To review (Virginia):** noticed during the image work on 2026-11-03 and left unchanged, because the copy and pictures are hers to decide:
   - [ ] the home page's Philips Hue card shows the Pocket Of Light / Arts Council graphic;

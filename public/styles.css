@@ -3209,28 +3209,177 @@ animation: particleDrift var(--duration, 8s) var(--delay, 0s) ease-in-out infini
    sitemap.xml). Everything else on that page reuses existing components.
    ═══════════════════════════════════════════════════════════════ */
 
-/* Hero: the long, question-style H1 reads better without the wide tracking */
-.landing-hero .page-hero-title {
-  letter-spacing: normal;
-  max-width: var(--max-width-narrow);
+/* Hero: label, title, text, buttons and badges on the left, her portrait on the right.
+   The empty first and last rows centre the text block against the portrait. */
+.landing-hero-inner {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  grid-template-rows: 1fr repeat(5, auto) 1fr;
+  grid-template-areas:
+    ".        portrait"
+    "label    portrait"
+    "title    portrait"
+    "subtitle portrait"
+    "cta      portrait"
+    "badges   portrait"
+    ".        portrait";
+  column-gap: var(--space-2xl);
+  max-width: var(--max-width);
   margin: 0 auto;
+  text-align: left;
+}
+
+.landing-hero .section-label {
+  grid-area: label;
+  text-wrap: pretty;
+}
+
+/* The long, question-style H1 reads better without the wide tracking. Its line length is set in em
+   so the title always breaks into "Looking for the Best / Voice-Over Artist in the / UK? Meet
+   Virginia Thorn" instead of splitting "Voice-Over" at its hyphen; recheck it if the title changes. */
+.landing-hero .page-hero-title {
+  grid-area: title;
+  max-width: 10.25em;
+  font-size: var(--fs-h1);
+  line-height: var(--lh-heading);
+  letter-spacing: normal;
+  text-wrap: balance;
 }
 
 .landing-hero .page-hero-subtitle {
-  max-width: var(--max-width-narrow);
+  grid-area: subtitle;
+  max-width: none;
+  margin: var(--space-md) 0 0;
 }
 
-/* The main button and the secondary text link, side by side and wrapping on phones */
+.landing-hero .landing-cta-row {
+  grid-area: cta;
+  justify-content: flex-start;
+  margin-top: var(--space-lg);
+}
+
+/* Her portrait: rounded like the other portraits, with the thin gold frame the bio page uses */
+.landing-hero-image {
+  grid-area: portrait;
+  align-self: center;
+  position: relative;
+  isolation: isolate;
+}
+
+.landing-hero-image::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--space-sm)) var(--space-sm) var(--space-sm) calc(-1 * var(--space-sm));
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-lg);
+  opacity: 0.3;
+  z-index: -1;
+}
+
+.landing-hero-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Badges under the buttons: a two-by-two block beside the portrait */
+.landing-badges {
+  grid-area: badges;
+  display: grid;
+  grid-template-columns: repeat(2, max-content);
+  gap: var(--space-xs);
+  margin-top: var(--space-lg);
+}
+
+.landing-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--fs-caption);
+  font-weight: 500;
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-wide);
+  color: var(--color-accent);
+  background: var(--color-accent-subtle);
+  border: 1px solid var(--color-border-hover);
+  border-radius: var(--radius-xl);
+  padding: var(--space-xs) var(--space-sm);
+}
+
+/* Small laptops and tablets held sideways: a narrower portrait leaves the text column room for the badges */
+@media (max-width: 1100px) {
+  .landing-hero-inner {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    column-gap: var(--space-xl);
+  }
+}
+
+/* Narrower screens: one column, the portrait right under the title, everything centred */
+@media (max-width: 960px) {
+  .landing-hero-inner {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas:
+      "label"
+      "title"
+      "portrait"
+      "subtitle"
+      "cta"
+      "badges";
+    max-width: var(--max-width-narrow);
+    text-align: center;
+  }
+
+  .landing-hero .page-hero-title {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .landing-hero-image {
+    justify-self: center;
+    width: 80%;
+    max-width: calc(var(--max-width-narrow) / 2);
+    margin-top: var(--space-lg);
+  }
+
+  .landing-hero .landing-cta-row {
+    justify-content: center;
+  }
+
+  .landing-badges {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* Small phones: the title shrinks with the screen so its three lines still fit beside the side padding */
+@media (max-width: 480px) {
+  .landing-hero .page-hero-title {
+    font-size: min(var(--fs-h1), calc((100vw - 2 * var(--space-md)) / 10.25));
+  }
+}
+
+/* The main button and the secondary text link on one baseline, wrapping cleanly on phones */
 .landing-cta-row {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  align-items: center;
+  align-items: baseline;
   gap: var(--space-sm) var(--space-md);
 }
 
-.landing-hero .landing-cta-row {
-  margin-top: var(--space-lg);
+/* Above phone width the button is a little slimmer, so the link fits beside it in the two-column layouts */
+@media (min-width: 769px) {
+  .landing-cta-row .contact-spotlight-btn {
+    padding-left: var(--space-lg);
+    padding-right: var(--space-lg);
+  }
 }
 
 /* The secondary link is underlined like links in running text, so it never relies on colour alone */
@@ -3282,36 +3431,120 @@ animation: particleDrift var(--duration, 8s) var(--delay, 0s) ease-in-out infini
   color: var(--color-text-primary);
 }
 
+/* A wide stage photo between the human-versus-AI cards and the closing line */
+.landing-feature-image {
+  max-width: var(--max-width-narrow);
+  margin: var(--space-xl) auto 0;
+  aspect-ratio: 2 / 1;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.landing-feature-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 30% 15%;
+}
+
+/* A photo in the last cell of a card grid: it fills the cell beside the cards and keeps
+   a 3:2 frame when it has a row of its own */
+.landing-grid-photo {
+  position: relative;
+  width: 100%;
+  align-self: stretch;
+  aspect-ratio: 3 / 2;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.landing-grid-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 30%;
+}
+
+/* Closing section: her photo beside the booking text and buttons */
+.landing-book {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: var(--space-xl);
+  align-items: center;
+}
+
+.landing-book-image {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.landing-book-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.landing-book .section-header {
+  text-align: left;
+  margin-bottom: var(--space-lg);
+}
+
+.landing-book .section-divider {
+  margin-left: 0;
+}
+
+.landing-book .section-desc {
+  margin: 0;
+  text-align: left;
+}
+
+.landing-book .landing-cta-row {
+  justify-content: flex-start;
+}
+
+/* Narrower screens: the closing photo above the centred text, like the hero */
+@media (max-width: 960px) {
+  .landing-book {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-lg);
+    max-width: var(--max-width-narrow);
+    margin: 0 auto;
+  }
+
+  .landing-book-image {
+    justify-self: center;
+    width: 100%;
+    max-width: calc(var(--max-width-narrow) / 2);
+  }
+
+  .landing-book .section-header,
+  .landing-book .section-desc {
+    text-align: center;
+  }
+
+  .landing-book .section-divider {
+    margin-left: auto;
+  }
+
+  .landing-book .section-desc {
+    margin: 0 auto;
+  }
+
+  .landing-book .landing-cta-row {
+    justify-content: center;
+  }
+}
+
 @media (max-width: 768px) {
   .vo-faq {
     grid-template-columns: 1fr;
   }
-}
 
-/* Badges in the landing hero */
-.landing-badges {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--space-xs) var(--space-sm);
-  margin-top: var(--space-md);
-  max-width: var(--max-width-narrow);
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.landing-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: var(--fs-caption);
-  letter-spacing: var(--ls-wide);
-  color: var(--color-accent);
-  background: var(--color-accent-subtle);
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  padding: 5px 14px;
-  border-radius: 20px;
-  font-weight: 500;
+  .landing-feature-image {
+    aspect-ratio: 3 / 2;
+  }
 }
 
 /* Quick specs block on the landing intro */
@@ -3338,6 +3571,11 @@ animation: particleDrift var(--duration, 8s) var(--delay, 0s) ease-in-out infini
   text-transform: uppercase;
   color: var(--color-accent);
   margin-bottom: 2px;
+}
+
+/* With an odd number of specs, the last one spans both columns so the block ends on a full row */
+.landing-quick-spec-item:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
 }
 
 @media (max-width: 640px) {
