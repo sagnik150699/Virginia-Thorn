@@ -129,7 +129,7 @@ Built on 2026-11-03.
 
 ## Checks and the deploy gate
 
-Commits and pushes are not checked on this computer; GitHub is the gate. On every push it runs `scripts/check.js` (Node 20) and deploys only when it passes, comparing with `main` as it was before the push (deploy). Locally, `npm run check` and `npm run check:smoke` are optional, for when something is in doubt. The script prints PASS, WARN, FAIL or SKIP per check with timings, then a plain-English summary; warnings never fail, and exit 0 means nothing failed. Options: `--smoke`, `--base <commit>`, `--quiet`.
+Commits and pushes are not checked on this computer; GitHub is the gate. On every push it runs `scripts/check.js` (Node 24) and deploys only when it passes, comparing with `main` as it was before the push (deploy). Locally, `npm run check` and `npm run check:smoke` are optional, for when something is in doubt. The script prints PASS, WARN, FAIL or SKIP per check with timings, then a plain-English summary; warnings never fail, and exit 0 means nothing failed. Options: `--smoke`, `--base <commit>`, `--quiet`.
 
 - a. `node --check` on every `.js` in `public/`.
 - b. Balanced braces in every `.css` (comments and strings skipped), with the line of any unmatched brace.
