@@ -3287,3 +3287,61 @@ animation: particleDrift var(--duration, 8s) var(--delay, 0s) ease-in-out infini
     grid-template-columns: 1fr;
   }
 }
+
+/* Badges in the landing hero */
+.landing-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-xs) var(--space-sm);
+  margin-top: var(--space-md);
+  max-width: var(--max-width-narrow);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.landing-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-wide);
+  color: var(--color-accent);
+  background: var(--color-accent-subtle);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+
+/* Quick specs block on the landing intro */
+.landing-quick-specs {
+  margin-top: var(--space-lg);
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+}
+
+.landing-quick-spec-item {
+  font-size: var(--fs-small);
+  line-height: 1.4;
+}
+
+.landing-quick-spec-item strong {
+  display: block;
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: 2px;
+}
+
+@media (max-width: 640px) {
+  .landing-quick-specs {
+    grid-template-columns: 1fr;
+  }
+}

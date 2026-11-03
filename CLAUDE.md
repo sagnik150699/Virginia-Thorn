@@ -12,9 +12,9 @@ Everything in `public/` is the published website. The root `package.json` only h
 
 ```bash
 npm run serve          # preview at http://127.0.0.1:8765/ (clean URLs, the 404 page and audio seeking work); needs no install
-npm run check          # optional, when something is in doubt: checks a-g in a few seconds
+npm run check          # optional, when something is in doubt: checks a-f in a few seconds
 npm install            # only for the optional browser test below (puppeteer-core drives the installed Chrome)
-npm run check:smoke    # optional: adds check h, every page in headless Chrome at 1440x900 and 390x844, about 15 s
+npm run check:smoke    # optional: adds check g, every page in headless Chrome at 1440x900 and 390x844, about 15 s
 firebase serve         # optional alternative preview, if the Firebase CLI is installed
 ```
 
@@ -27,9 +27,9 @@ firebase serve         # optional alternative preview, if the Firebase CLI is in
 
 - Pull before you start work. When a change is ready, Claude commits and pushes; never make the owner wait on local checks. Temporary exception until the handover in November 2026: on Sagnik's PC (its `git config user.name` is Sagnik Bhattacharya) he commits and pushes himself, so leave the changes in the working copy and report.
 - Commit messages: one line, imperative, plain words, saying what changed and why, under about 72 characters (for example "Fix sideways scrolling on the CV page on phones"); never just "update", "fix" or "changes"; no `Co-Authored-By` trailer.
-- On every push GitHub runs `node scripts/check.js` and deploys only when it passes. If a push did not go live, open the failed run in the repository's Actions tab, fix what the `check` job lists and push again. For a removal the owner asked for, put `[allow-removals]` in a commit message (an empty commit with that note is enough), so check e accepts it.
-- Rename an image, recording or page with `git mv`, then update every reference (pages, `sitemap.xml`, share tags, JSON-LD); check e reports `renamed: old → new` instead of a removal, and checks c and d fail on any reference left on the old name.
-- Check f flags email addresses, phone numbers, UK postcodes and keys in changed files. Never allow-list a hit yourself: ask the owner, then add the exact text and who approved it to `ALLOWED_PRIVATE_DATA` in `scripts/check.js`.
+- On every push GitHub runs `node scripts/check.js` and deploys only when it passes. If a push did not go live, open the failed run in the repository's Actions tab, fix what the `check` job lists and push again.
+- Rename an image, recording or page with `git mv`, then update every reference (pages, `sitemap.xml`, share tags, JSON-LD); checks c and d fail on any reference left on the old name.
+- Check e flags email addresses, phone numbers, UK postcodes and keys in changed files. Never allow-list a hit yourself: ask the owner, then add the exact text and who approved it to `ALLOWED_PRIVATE_DATA` in `scripts/check.js`.
 - A standalone page (no site navigation, `id="navbar"`) needs no `styles.css` or `script.js`, only `<title>`, charset and viewport. A public page left out of `sitemap.xml` only gives a warning: add it there, or mark it noindex.
 
 ## Hard rules

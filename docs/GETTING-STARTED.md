@@ -105,7 +105,7 @@ These steps are for Windows. Open PowerShell (press the Windows key, type "Power
 
 GitHub checks every push and publishes only when the checks pass. If a change did not go live, Claude opens the failed run in the repository's Actions tab, reads the `check` job, fixes what it lists and pushes again. When something is in doubt, `npm run check` runs the same checks on this PC in a few seconds; `npm run check:smoke` also opens every page in a hidden Chrome (about 15 seconds, after the optional `npm install`).
 
-The words, photos, credits and links are yours to decide: Claude changes or removes them only when you ask, and never deletes content on its own. GitHub's checks back this up: if something disappears, the change is not published, unless you asked for the removal and Claude marks it `[allow-removals]`.
+The words, photos, credits and links are yours to decide: Claude changes or removes them only when you ask, and never deletes content on its own.
 
 ## What to keep private
 

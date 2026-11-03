@@ -5,8 +5,8 @@
 // computer is optional, for when something is in doubt; it needs only Node.js 20 or newer.
 // The optional browser test (--smoke) also needs puppeteer-core ("npm install" once) and Google Chrome.
 //
-//   npm run check          checks a to g, a few seconds
-//   npm run check:smoke    checks a to h, adds a real-browser test of every page
+//   npm run check          checks a to f, a few seconds
+//   npm run check:smoke    checks a to g, adds a real-browser test of every page
 //
 // The checks:
 //   a. JavaScript syntax        every .js file in public/ can be read by a browser (node --check)
@@ -17,12 +17,10 @@
 //                               YouTube videos use youtube-nocookie.com
 //   d. Sitemap                  sitemap.xml lists only files that exist and no hidden pages;
 //                               a public page missing from it is a warning for the owner to decide
-//   e. Content preservation     no text, image or link from the last commit has gone missing
-//                               (the "never delete content" rule in CLAUDE.md)
-//   f. Private data and keys    changed files hold no email addresses, phone numbers, UK
+//   e. Private data and keys    changed files hold no email addresses, phone numbers, UK
 //                               postcodes, API keys or private keys
-//   g. gitleaks                 the gitleaks secret scanner finds nothing (skipped if not installed)
-//   h. Browser smoke test       only with --smoke: every page opens in headless Chrome at desktop
+//   f. gitleaks                 the gitleaks secret scanner finds nothing (skipped if not installed)
+//   g. Browser smoke test       only with --smoke: every page opens in headless Chrome at desktop
 //                               and phone sizes with no errors, missing files or sideways scrolling
 //
 // Exit code: 0 when nothing failed (warnings and skipped checks are not failures), 1 when something failed.
@@ -33,14 +31,10 @@ const { spawnSync } = require('node:child_process');
 
 const HELP = `Usage: node scripts/check.js [options]
 
-  --smoke            also open every page in headless Chrome (check h)
-  --allow-removals   removed text, images or links become a warning instead of a
-                     failure. Only for removals the owner asked for. On GitHub,
-                     a pushed commit message containing [allow-removals] does
-                     the same (so does CHECK_ALLOW_REMOVALS=1 on this computer).
+  --smoke            also open every page in headless Chrome (check g)
   --base <commit>    compare with this commit instead of HEAD (GitHub uses this
                      to check everything in a push)
-  --changed-only     compare only pages that changed (the default)
+  --changed-only     scan only the files that changed for private data (the default)
   --quiet            print only problems and the summary
   --help             show this help`;
 
@@ -67,7 +61,7 @@ const VIEWPORTS = [
   { label: 'phone 390x844', width: 390, height: 844, deviceScaleFactor: 1, isMobile: true, hasTouch: true },
 ];
 
-// Text that check f may ignore, because the owner has confirmed it is meant to be public.
+// Text that check e may ignore, because the owner has confirmed it is meant to be public.
 // Nothing goes here without the owner's approval. Each entry matches that exact text in any file:
 //   { text: 'the exact text that was found', why: 'what it is, who approved it, and when' },
 const ALLOWED_PRIVATE_DATA = [
@@ -79,11 +73,10 @@ const ALLOWED_PRIVATE_DATA = [
 // ---------------------------------------------------------------------------------------------
 
 function parseArgs(argv) {
-  const opts = { smoke: false, allowRemovals: false, base: undefined, quiet: false, help: false, unknown: [] };
+  const opts = { smoke: false, base: undefined, quiet: false, help: false, unknown: [] };
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
     if (arg === '--smoke') opts.smoke = true;
-    else if (arg === '--allow-removals') opts.allowRemovals = true;
     else if (arg === '--changed-only') continue; // already the default
     else if (arg === '--quiet' || arg === '-q') opts.quiet = true;
     else if (arg === '--help' || arg === '-h') opts.help = true;
@@ -103,7 +96,7 @@ const say = (line = '') => console.log(line);
 const seconds = (ms) => `${(ms / 1000).toFixed(1)} s`;
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
-// One check's outcome: problems make it FAIL (or WARN when they are allowed), notes are extra detail.
+// One check's outcome: problems make it FAIL, warnings make it WARN, notes are extra detail.
 class CheckResult {
   constructor(letter, title) {
     this.letter = letter;
@@ -113,7 +106,6 @@ class CheckResult {
     this.notes = [];
     this.fix = '';
     this.skipReason = '';
-    this.warning = ''; // set when problems were found but explicitly allowed
     this.warnings = []; // worth a look, but they do not stop a commit
     this.ms = 0;
   }
@@ -131,7 +123,7 @@ class CheckResult {
   }
   finish() {
     if (this.skipReason) this.status = 'SKIP';
-    else if (this.problems.length) this.status = this.warning ? 'WARN' : 'FAIL';
+    else if (this.problems.length) this.status = 'FAIL';
     else if (this.warnings.length) this.status = 'WARN';
   }
 }
@@ -149,11 +141,8 @@ function printResult(r, opts) {
 function printSummary(results, totalMs) {
   const failed = results.filter((r) => r.status === 'FAIL');
   const skipped = results.filter((r) => r.status === 'SKIP');
-  // Warnings never fail a check: allowed removals (r.warning) and things for the owner to decide (r.warnings)
-  const warningLines = results.flatMap((r) => [
-    ...(r.status === 'WARN' && r.warning ? [r.warning] : []),
-    ...r.warnings,
-  ].map((w) => `  ${paint(33, 'Warning')} for ${r.letter}. ${r.title}: ${w}`));
+  // Warnings never fail a check: they are things for the owner to decide (r.warnings)
+  const warningLines = results.flatMap((r) => r.warnings.map((w) => `  ${paint(33, 'Warning')} for ${r.letter}. ${r.title}: ${w}`));
   const total = results.length;
   const withWarnings = warningLines.length ? `, with ${plural(warningLines.length, 'warning')} below` : '';
   say('');
@@ -341,7 +330,7 @@ function parseHtml(html) {
   let title = null;
   let pos = 0;
   let line = 1;
-  let openLink = null; // the <a> whose words are being read, so a changed link can be described
+  let openLink = null; // the <a> whose words are being read (kept as its tag.text)
 
   const moveTo = (to) => {
     for (let k = pos; k < to; k++) if (html.charCodeAt(k) === 10) line++;
@@ -452,114 +441,6 @@ function parseHtml(html) {
   return { tags, texts, title };
 }
 
-// Splits text into words and punctuation marks, so the comparison ignores spacing and line breaks.
-// Curly and straight quotes, and the various dashes, count as the same character.
-function tokenize(text) {
-  const normal = text
-    .replace(/[‘’‚‛′]/g, "'")
-    .replace(/[“”„‟″]/g, '"')
-    .replace(/[‐-―]/g, '-');
-  return normal.match(/[\p{L}\p{N}]+|[^\s\p{L}\p{N}]/gu) || [];
-}
-
-// Turns an address into a form in which two ways of writing the same destination are equal:
-// "bio.html", "./bio.html" and "/bio" are one page; http and https are one site; a YouTube
-// video is the same video on youtube.com and youtube-nocookie.com.
-function comparableRef(raw, folder) {
-  const value = collapse(raw);
-  if (!value) return null;
-  if (value.startsWith('#')) return value;
-  const web = /^(?:https?:)?\/\/([^/?#]*)(.*)$/i.exec(value);
-  if (web) {
-    const host = web[1].toLowerCase();
-    const video = /^\/embed\/([\w-]+)/.exec(web[2]);
-    if (video && /(^|\.)youtube(-nocookie)?\.com$/.test(host)) return `youtube-video:${video[1]}`;
-    return `https://${host}${web[2]}`;
-  }
-  if (/^[a-z][a-z0-9+.-]*:/i.test(value)) return value.replace(/^[a-z][a-z0-9+.-]*:/i, (s) => s.toLowerCase());
-  const cut = value.search(/[?#]/);
-  const pathPart = cut === -1 ? value : value.slice(0, cut);
-  const suffix = cut === -1 ? '' : value.slice(cut);
-  let target = path.posix.normalize((pathPart.startsWith('/') ? pathPart.slice(1) : path.posix.join(folder, pathPart)) || '.');
-  if (target === '.') target = '';
-  target = target.replace(/(^|\/)index\.html$/, '$1').replace(/\.html$/, '');
-  return `site:/${target}${suffix}`;
-}
-
-// What the "never delete content" rule protects on one page: its visible text, the addresses of
-// its images, audio and video (src, data-src, srcset, poster), and the addresses of its links (href).
-const TOKEN_SEP = '\u0001';
-const MEDIA_ATTRS = new Set(['src', 'data-src', 'srcset', 'poster']);
-
-function pageContent(html, rel) {
-  const doc = parseHtml(html);
-  const folder = folderOf(rel);
-  const words = [];
-  for (const text of doc.texts) for (const token of tokenize(text)) words.push(token);
-  const media = new Map(); // comparable address -> the address as written
-  const links = new Map();
-  const linkWords = new Map(); // comparable address -> the words of the link, e.g. "Spotlight"
-  const linkByWords = new Map(); // the words of a link -> its address as written
-  const add = (map, value) => {
-    const key = comparableRef(value, folder);
-    if (key !== null && !map.has(key)) map.set(key, collapse(value));
-  };
-  for (const tag of doc.tags) {
-    for (const [name, value] of Object.entries(tag.attrs)) {
-      if (name === 'href') add(links, value);
-      else if (MEDIA_ATTRS.has(name)) for (const url of name === 'srcset' ? srcsetUrls(value) : [value]) add(media, url);
-    }
-    // Images shown through CSS on the page itself: style="" attributes and <style> blocks
-    const css = `${tag.attrs.style || ''}\n${tag.name === 'style' ? tag.content || '' : ''}`;
-    for (const url of cssMediaUrls(css)) add(media, url);
-    if (tag.name === 'a' && tag.text && tag.attrs.href !== undefined) {
-      const key = comparableRef(tag.attrs.href, folder);
-      if (key !== null && !linkWords.has(key)) linkWords.set(key, tag.text);
-      if (!linkByWords.has(tag.text)) linkByWords.set(tag.text, collapse(tag.attrs.href));
-    }
-  }
-  return { texts: doc.texts, words: TOKEN_SEP + words.join(TOKEN_SEP) + TOKEN_SEP, media, links, linkWords, linkByWords };
-}
-
-// Image, audio and video files that CSS refers to with url(). Fonts and inline data: images are
-// design rather than the client's material, so the "never delete content" rule leaves them out.
-const MEDIA_FILE = /\.(jpe?g|png|gif|webp|avif|svg|ico|bmp|tiff?|mp3|m4a|wav|ogg|flac|mp4|webm|mov)$/i;
-function cssMediaUrls(css) {
-  return cssUrls(css)
-    .map(({ url }) => url.trim())
-    .filter((url) => !/^data:/i.test(url) && MEDIA_FILE.test(url.replace(/[?#].*$/, '')));
-}
-
-// What the rule protects in a stylesheet: the images, audio and video it shows
-function cssContent(css, rel) {
-  const folder = folderOf(rel);
-  const media = new Map();
-  for (const url of cssMediaUrls(css)) {
-    const key = comparableRef(url, folder);
-    if (key !== null && !media.has(key)) media.set(key, collapse(url));
-  }
-  return { texts: [], words: TOKEN_SEP, media, links: new Map(), linkWords: new Map(), linkByWords: new Map() };
-}
-
-// True when the words of `text` appear, in order and next to each other, somewhere on the page
-function pageHasText(content, text) {
-  const tokens = tokenize(text);
-  return tokens.length === 0 || content.words.includes(TOKEN_SEP + tokens.join(TOKEN_SEP) + TOKEN_SEP);
-}
-
-// The pieces of `from` (in page order) that `other` lacks, with neighbouring pieces joined,
-// so a deleted paragraph that contains links is reported as one quote rather than in fragments
-function missingText(from, other) {
-  const runs = [];
-  let run = [];
-  for (const text of from.texts) {
-    if (!pageHasText(other, text)) run.push(text);
-    else if (run.length) runs.push(run.splice(0).join(' '));
-  }
-  if (run.length) runs.push(run.join(' '));
-  return runs;
-}
-
 // ---------------------------------------------------------------------------------------------
 // Git
 // ---------------------------------------------------------------------------------------------
@@ -596,9 +477,8 @@ function comparisonBase(opts) {
           : `Commit ${ref} is not in this copy of the history (was the history rewritten?), so nothing was compared.`,
     };
   }
-  const headSha = (git(['rev-parse', 'HEAD']) || '').trim();
   const label = ref === 'HEAD' ? `the last commit (HEAD, ${sha.slice(0, 7)})` : `commit ${sha.slice(0, 7)}`;
-  return { ref, sha, headSha, label, note };
+  return { ref, sha, label, note };
 }
 
 // Files that differ from the comparison commit, including new files git does not track yet
@@ -614,88 +494,6 @@ function listChanges(sha) {
   const untracked = git(['ls-files', '--others', '--exclude-standard', '-z']) || '';
   for (const file of untracked.split('\0')) if (file) changes.push({ status: 'A', path: file, untracked: true });
   return changes;
-}
-
-// Files renamed since the comparison commit. Returns { renames: old path -> new path,
-// sameContent: old path -> every new path with exactly its content }. Three sources, so a rename
-// counts however it was made:
-//   1. git diff -M: the working copy against that commit (git mv, or a move that was added)
-//   2. git status: renames staged in the index, even if the file was edited a lot afterwards
-//   3. the same content at a new path (moved without git, or new names for identical copies)
-// A "rename" whose old file still exists is really a copy, so it does not count.
-function listRenames(sha, changes) {
-  const renames = new Map();
-  const diff = (git(['diff', '--name-status', '-M', '-z', sha, '--']) || '').split('\0');
-  for (let i = 0; i < diff.length && diff[i]; ) {
-    const status = diff[i];
-    if (status[0] === 'R') renames.set(diff[i + 1], diff[i + 2]); // R100, old path, new path
-    i += status[0] === 'R' || status[0] === 'C' ? 3 : 2;
-  }
-  const staged = (git(['status', '--porcelain=v1', '-z', '--untracked-files=no']) || '').split('\0');
-  for (let i = 0; i < staged.length && staged[i]; i++) {
-    const flags = staged[i].slice(0, 2);
-    if (!/[RC]/.test(flags)) continue;
-    const from = staged[++i]; // with -z the old path comes after the new one
-    if (flags.includes('R') && !renames.has(from)) renames.set(from, staged[i - 1].slice(3));
-  }
-  // 3. Same content at a new path. Several old files can share one picture (the site has identical
-  //    copies under different names), so every new file with that exact content is remembered.
-  const sameContent = new Map(); // old path -> every new path holding exactly its content
-  const gone = changes.filter((c) => c.status === 'D').map((c) => c.path);
-  const fresh = changes.filter((c) => c.status === 'A').map((c) => c.path);
-  if (gone.length && fresh.length) {
-    const blobOf = new Map(); // path -> content id at the comparison commit
-    for (const entry of (git(['ls-tree', '-r', '-z', sha]) || '').split('\0')) {
-      const m = /^\d+ blob ([0-9a-f]+)\t([\s\S]+)$/.exec(entry);
-      if (m) blobOf.set(m[2], m[1]);
-    }
-    const hashed = spawnSync('git', ['hash-object', '--stdin-paths'], { cwd: ROOT, input: `${fresh.join('\n')}\n`, encoding: 'utf8' });
-    const hashes = hashed.status === 0 ? hashed.stdout.split(/\r?\n/) : [];
-    const freshByContent = new Map();
-    fresh.forEach((file, i) => {
-      if (!hashes[i]) return;
-      if (!freshByContent.has(hashes[i])) freshByContent.set(hashes[i], []);
-      freshByContent.get(hashes[i]).push(file);
-    });
-    for (const file of gone) {
-      const same = freshByContent.get(blobOf.get(file));
-      if (same) sameContent.set(file, same);
-    }
-    // Pair old and new names one to one for the "renamed:" lines, preferring the same folder and
-    // the most words in common; the pairing only affects the wording, not what passes
-    const words = (p) => new Set(path.posix.basename(p).replace(/\.[^.]+$/, '').toLowerCase().split(/[^a-z0-9]+/).filter(Boolean));
-    const likeness = (a, b) => (path.posix.dirname(a) === path.posix.dirname(b) ? 100 : 0) + [...words(a)].filter((w) => words(b).has(w)).length;
-    const options = [];
-    for (const [from, tos] of sameContent) if (!renames.has(from)) for (const to of tos) options.push({ from, to, score: likeness(from, to) });
-    options.sort((a, b) => b.score - a.score);
-    const taken = new Set(renames.values());
-    for (const { from, to } of options) {
-      if (!renames.has(from) && !taken.has(to)) {
-        renames.set(from, to);
-        taken.add(to);
-      }
-    }
-    for (const [from, tos] of sameContent) if (!renames.has(from)) renames.set(from, tos[0]); // more old copies than new ones
-  }
-  for (const [from, to] of renames) {
-    if (fs.existsSync(path.join(ROOT, from)) || !fs.existsSync(path.join(ROOT, to))) renames.delete(from);
-  }
-  return { renames, sameContent };
-}
-
-// Whether removed content is allowed this time, and why
-function removalPermission(opts, compare) {
-  if (opts.allowRemovals) return { allowed: true, how: 'the --allow-removals option was used' };
-  if (/^(1|true|yes)$/i.test(process.env.CHECK_ALLOW_REMOVALS || '')) {
-    return { allowed: true, how: 'CHECK_ALLOW_REMOVALS=1 was set (the same as --allow-removals)' };
-  }
-  if (compare.sha && compare.sha !== compare.headSha) {
-    const messages = git(['log', '--format=%B', `${compare.sha}..HEAD`]) || '';
-    if (/\[allow-removals\]/i.test(messages)) {
-      return { allowed: true, how: `a commit message since ${compare.sha.slice(0, 7)} contains [allow-removals]` };
-    }
-  }
-  return { allowed: false };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -956,154 +754,7 @@ async function checkSitemap(r) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// e. Content preservation (the "never delete content" rule)
-// ---------------------------------------------------------------------------------------------
-
-// Collects findings as  kind + value -> the files they were found in
-class Findings {
-  constructor() {
-    this.map = new Map();
-  }
-  add(kind, value, file) {
-    const key = `${kind}\u0000${value}`;
-    if (!this.map.has(key)) this.map.set(key, { kind, value, files: [] });
-    const entry = this.map.get(key);
-    if (!entry.files.includes(file)) entry.files.push(file);
-  }
-  get size() {
-    return this.map.size;
-  }
-  lines(verb) {
-    const where = (files) => (files.length <= 3 ? files.join(', ') : `${files.length} pages (${files.slice(0, 2).join(', ')} and ${files.length - 2} more)`);
-    return [...this.map.values()].map(({ kind, value, files }) =>
-      kind === 'file' ? `${verb === 'removed' ? 'Deleted' : 'New'} file: ${value}` : `${kind} ${verb} on ${where(files)}: ${kind === 'Text' ? `"${value}"` : value}`,
-    );
-  }
-}
-
-// The file a comparable address points at, when git says that file was renamed:
-// "site:/assets/a.jpg" -> "public/assets/a.jpg", "site:/bio" -> "public/bio.html"
-function renamedFileFor(key, renames) {
-  const m = /^site:\/([^?#]*)/.exec(key) || /^https:\/\/(?:www\.)?virginiathorn\.com\/([^?#]*)/.exec(key);
-  if (!m) return null;
-  const p = m[1];
-  const candidates = p === '' || p.endsWith('/') ? [`${p}index.html`] : [p, `${p}.html`, `${p}/index.html`];
-  return candidates.map((c) => `public/${c}`).find((c) => renames.has(c)) || null;
-}
-
-// The comparable addresses a page can use for a file in public/: relative, or the full site address
-function addressesFor(repoPath, suffix) {
-  const rel = repoPath.slice('public/'.length);
-  const clean = rel.replace(/(^|\/)index\.html$/, '$1').replace(/\.html$/, '');
-  return [comparableRef(`/${rel}`, ''), comparableRef(`${SITE_URL}${rel}`, ''), comparableRef(`${SITE_URL}${clean}`, '')].map((a) => a + suffix);
-}
-
-async function checkContent(r, ctx) {
-  if (ctx.compare.problem) {
-    r.skip(ctx.compare.problem);
-    return;
-  }
-  const { sha, label } = ctx.compare;
-  const renames = ctx.renames; // old path -> new path, from git
-  const renamedFrom = new Map([...renames].map(([from, to]) => [to, from]));
-  const updatedIn = new Map(); // renamed file -> the files whose references now use its new name
-  const removed = new Findings();
-  const added = new Findings();
-  let pagesCompared = 0;
-  let sheetsCompared = 0;
-
-  for (const change of ctx.changes) {
-    if (!change.path.startsWith('public/')) continue;
-    if (change.status === 'D') {
-      // A renamed file is listed below as information; a deleted image, recording or page is a removal
-      if (!renames.has(change.path)) removed.add('file', change.path, change.path);
-      continue;
-    }
-    const isPage = change.path.endsWith('.html');
-    if (!isPage && !change.path.endsWith('.css')) continue;
-    // A renamed page or stylesheet is compared with its old self
-    const oldPath = change.status === 'A' ? renamedFrom.get(change.path) : change.path;
-    const before = oldPath ? git(['show', `${sha}:${oldPath}`]) : null;
-    if (before === null) {
-      if (isPage) added.add('file', change.path, change.path);
-      continue;
-    }
-    if (isPage) pagesCompared++;
-    else sheetsCompared++;
-    const read = isPage ? pageContent : cssContent;
-    const old = read(before, oldPath.slice('public/'.length));
-    const now = read(fs.readFileSync(path.join(ROOT, change.path), 'utf8'), change.path.slice('public/'.length));
-
-    // Text, then images/media and links, compared as sets of values (line endings, spacing,
-    // markup and attribute order make no difference)
-    for (const text of missingText(old, now)) removed.add('Text', text, change.path);
-    for (const text of missingText(now, old)) added.add('Text', text, change.path);
-    const refs = [
-      ['Image/media', old.media, now.media],
-      ['Link', old.links, now.links],
-    ];
-    const standIns = new Set(); // new addresses that replace the old names of renamed files
-    for (const [kind, oldRefs, newRefs] of refs) {
-      for (const [key, value] of oldRefs) {
-        if (newRefs.has(key)) continue;
-        // Its file was renamed, and this file now points at the new name (or at a new name of an
-        // identical copy, which shows exactly the same picture): not a removal
-        const from = renamedFileFor(key, renames);
-        if (from) {
-          const to = renames.get(from);
-          const newNames = [to, ...(ctx.sameContent.get(from) || []).filter((p) => p !== to)];
-          const suffix = key.replace(/^[^?#]*/, '');
-          const standIn = newNames.flatMap((p) => addressesFor(p, suffix)).find((a) => now.media.has(a) || now.links.has(a));
-          if (standIn) {
-            standIns.add(standIn);
-            if (!updatedIn.has(from)) updatedIn.set(from, new Set());
-            updatedIn.get(from).add(change.path);
-          } else {
-            removed.add(kind, `${value} (renamed to ${to}, but this file no longer refers to it)`, change.path);
-          }
-          continue;
-        }
-        // Same words, new address: say so, because that is usually an edited link rather than a deleted one
-        const words = kind === 'Link' && old.linkWords.get(key);
-        const newAddress = words && now.linkByWords.get(words);
-        removed.add(kind, newAddress ? `${value} (the link "${words}" now goes to ${newAddress})` : value, change.path);
-      }
-    }
-    for (const [kind, oldRefs, newRefs] of refs) {
-      for (const [key, value] of newRefs) if (!oldRefs.has(key) && !standIns.has(key)) added.add(kind, value, change.path);
-    }
-  }
-
-  removed.lines('removed').forEach((line) => r.fail(line));
-  let renameCount = 0;
-  for (const [from, to] of renames) {
-    if (!from.startsWith('public/')) continue;
-    renameCount++;
-    const files = [...(updatedIn.get(from) || [])];
-    const where = files.length > 3 ? `${files.length} files` : files.join(', ');
-    const twins = (ctx.sameContent.get(from) || []).filter((p) => p !== to);
-    const details = [twins.length ? `same picture also at ${twins.join(', ')}` : '', files.length ? `references updated in ${where}` : ''].filter(Boolean);
-    r.note(`renamed: ${from} → ${to}${details.length ? ` (${details.join('; ')})` : ''}`);
-  }
-  added.lines('added').forEach((line) => r.note(line));
-  if (ctx.compare.note) r.note(ctx.compare.note);
-  const sheets = sheetsCompared ? ` and ${plural(sheetsCompared, 'stylesheet')}` : '';
-  r.note(
-    `Compared ${plural(pagesCompared, 'changed page')}${sheets} with ${label}: ` +
-      `${plural(removed.size, 'removal')}, ${plural(added.size, 'addition')}, ${plural(renameCount, 'renamed file')}.`,
-  );
-
-  if (removed.size && ctx.permission.allowed) {
-    r.warning = `${plural(removed.size, 'removal')} accepted because ${ctx.permission.how}. Make sure the owner asked for them.`;
-  }
-  r.fix =
-    `Put back the text, images and links listed above (see what changed with: git diff ${ctx.compare.ref === 'HEAD' ? 'HEAD' : sha.slice(0, 7)} -- <file>). ` +
-    'Only if the owner asked for the removal: put [allow-removals] in the commit message, and GitHub accepts it ' +
-    '(on this computer, --allow-removals shows the same result).';
-}
-
-// ---------------------------------------------------------------------------------------------
-// f. Private data and keys in changed files
+// e. Private data and keys in changed files
 // ---------------------------------------------------------------------------------------------
 
 const BINARY_EXTENSIONS = new Set([
@@ -1197,6 +848,7 @@ async function checkPrivateData(r, ctx) {
       });
   }
   r.note(`Scanned ${plural(scanned, 'changed text file')} (compared with ${ctx.compare.label}).`);
+  if (ctx.compare.note) r.note(ctx.compare.note);
   if (allowedHits) r.note(`${allowedHits} ${allowedHits === 1 ? 'match' : 'matches'} skipped because ALLOWED_PRIVATE_DATA in scripts/check.js allows them.`);
   r.fix =
     'If it should not be published, remove it (the repository is public, so anything committed is published). ' +
@@ -1206,7 +858,7 @@ async function checkPrivateData(r, ctx) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// g. gitleaks
+// f. gitleaks
 // ---------------------------------------------------------------------------------------------
 
 async function checkGitleaks(r) {
@@ -1249,7 +901,7 @@ async function checkGitleaks(r) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// h. Browser smoke test (only with --smoke)
+// g. Browser smoke test (only with --smoke)
 // ---------------------------------------------------------------------------------------------
 
 function findChrome() {
@@ -1440,8 +1092,7 @@ async function main() {
 
   const compare = comparisonBase(opts);
   const changes = compare.sha ? listChanges(compare.sha) : [];
-  const { renames, sameContent } = compare.sha ? listRenames(compare.sha, changes) : { renames: new Map(), sameContent: new Map() };
-  const ctx = { compare, changes, renames, sameContent, permission: removalPermission(opts, compare) };
+  const ctx = { compare, changes };
   say(`Checking the website in public/ (${plural(pages.length, 'page')})${compare.sha ? `, compared with ${compare.label}` : ''}.`);
   say('');
 
@@ -1450,11 +1101,10 @@ async function main() {
     ['b', 'CSS braces', checkCss],
     ['c', 'Pages, links and images', checkPages],
     ['d', 'Sitemap', checkSitemap],
-    ['e', 'Content preservation', checkContent],
-    ['f', 'Private data and keys', checkPrivateData],
-    ['g', 'gitleaks secret scan', checkGitleaks],
+    ['e', 'Private data and keys', checkPrivateData],
+    ['f', 'gitleaks secret scan', checkGitleaks],
   ];
-  if (opts.smoke) checks.push(['h', 'Browser smoke test', checkSmoke]);
+  if (opts.smoke) checks.push(['g', 'Browser smoke test', checkSmoke]);
 
   const results = [];
   for (const [letter, title, run] of checks) {
@@ -1490,8 +1140,7 @@ if (require.main === module) {
 } else {
   // Loaded by another script (for example a test): share the helpers instead of running the checks
   module.exports = {
-    parseHtml, tokenize, comparableRef, pageContent, cssContent, pageHasText, missingText, findPrivateData,
-    braceProblems, resolveLocal, cssUrls, siteUrlsIn, renamedFileFor, addressesFor,
+    parseHtml, findPrivateData, braceProblems, resolveLocal, cssUrls, siteUrlsIn,
     CheckResult, checkPages, checkSitemap,
   };
 }

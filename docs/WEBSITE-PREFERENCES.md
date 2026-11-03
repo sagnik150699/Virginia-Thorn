@@ -12,6 +12,7 @@ What the owner wants from the site: content, design, SEO and privacy decisions, 
 ## Content
 
 - Claude never deletes or rewords Virginia's copy, credits, images or links on its own; what they say is hers to decide, and changing them is fine when she asks.
+- 2026-11-03, Sagnik: the content-preservation deploy gate (the former check e and the `[allow-removals]` marker) was removed, because Virginia edits her own content freely and must never be blocked by it. The private-data check stays: when it fires, Claude asks Virginia and allow-lists only what she approves.
 - Standalone pages made for search, such as the UK voice-over landing page, stay out of the nav and footer unless Virginia asks.
 - Wherever the copy names Coding Liquids, the name links to https://codingliquids.com.
 - The sentence about the e-learning courses she voices (home and bio pages) links to her Udemy profile, https://www.udemy.com/user/virginiathorn/, next to the Coding Liquids link; `llms.txt` lists both.
@@ -77,7 +78,7 @@ This is the site's one to-do list, shared between PCs through git (until the Nov
 A push to `main` goes live within a few minutes, once GitHub's checks pass:
 
 1. GitHub runs the checks on every push and publishes only if they pass; run `npm run check` yourself only when something is in doubt.
-2. Nothing of Virginia's may go missing: check e stops the deploy when text, an image or a link disappears. When Virginia asked for a removal, a commit message says `[allow-removals]`, and that is the only way it gets through.
-3. Privacy: check f flags email addresses, phone numbers, postcodes and keys, but it cannot recognise everything (a home address written out in words, for example), so read the change too. Only Virginia can approve publishing private details.
+2. The content is Virginia's: Claude changes or removes copy, images, credits or links only when she asks. No check enforces this (decided 2026-11-03), so it is up to Claude to follow it.
+3. Privacy: check e flags email addresses, phone numbers, postcodes and keys, but it cannot recognise everything (a home address written out in words, for example), so read the change too. Only Virginia can approve publishing private details.
 4. Preview with `npm run serve` when it helps. After the push, look at the result on https://virginia-thorn.web.app, not on virginiathorn.com.
 5. If the change finishes an open task, tick it above in the same commit.
