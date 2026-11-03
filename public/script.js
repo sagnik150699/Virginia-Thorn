@@ -1,3 +1,11 @@
+// ===== Website settings (safe to edit) =====
+// Google Analytics: paste the Measurement ID from your Google Analytics account between the quotes.
+// It looks like 'G-XXXXXXXXXX'. Leave it empty and nothing is tracked.
+const ANALYTICS_MEASUREMENT_ID = '';
+// 'granted' = analytics runs until a visitor presses Reject (current choice).
+// 'denied'  = analytics only runs after a visitor presses Accept (what UK rules prefer).
+const ANALYTICS_DEFAULT_CONSENT = 'granted';
+
 /* ═══════════════════════════════════════════════════════════════
    Virginia Thorn — Main JavaScript
    Navigation, Scroll Reveals, Lightbox, Preloader, Animations
@@ -123,7 +131,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // ══════════════════════════════════════════════════════════════
   //  SMOOTH SCROLL FOR ANCHOR LINKS
   // ══════════════════════════════════════════════════════════════
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  // Skip bare "#" links (the footer "Cookie settings" link): '#' is not a valid selector
+  document.querySelectorAll('a[href^="#"]:not([href="#"])').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
       const target = document.querySelector(this.getAttribute('href'));
       if (target) {
@@ -313,6 +322,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const href = link.getAttribute('href');
     if (href && !href.startsWith('#') && !href.startsWith('http') && !href.startsWith('mailto')) {
       link.addEventListener('click', (e) => {
+        // Leave new-tab, new-window and download clicks to the browser (Ctrl/Cmd/Shift/Alt, middle button)
+        if (e.defaultPrevented || e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey) return;
+        const linkTarget = (link.getAttribute('target') || '').toLowerCase();
+        if ((linkTarget && linkTarget !== '_self') || link.hasAttribute('download')) return;
         e.preventDefault();
         const target = href;
 
@@ -433,6 +446,274 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+
+  // ══════════════════════════════════════════════════════════════
+  //  COOKIE BANNER + ANALYTICS CONSENT
+  //  Settings are at the top of this file. The visitor's choice is
+  //  stored as "vt-cookie-consent" ("accepted|<ISO time>" or
+  //  "rejected|<ISO time>") in localStorage and in a 12-month cookie.
+  //  Footer links with [data-cookie-settings] reopen the banner.
+  // ══════════════════════════════════════════════════════════════
+  {
+    const CONSENT_KEY = 'vt-cookie-consent';
+    const CONSENT_MAX_AGE = 60 * 60 * 24 * 365; // 12 months, in seconds
+    const gaId = String(ANALYTICS_MEASUREMENT_ID || '').trim();
+    let choice = null; // 'accepted', 'rejected' or null (not chosen yet)
+    let gaLoaded = false;
+    let banner = null;
+    let hideTimer = null;
+    let returnFocusTo = null;
+
+    const parseChoice = (raw) => {
+      if (!raw) return null;
+      const [value, at] = String(raw).split('|');
+      const time = Date.parse(at);
+      if ((value !== 'accepted' && value !== 'rejected') || isNaN(time)) return null;
+      if (Date.now() - time > CONSENT_MAX_AGE * 1000) return null; // older than 12 months: ask again
+      return { value, time };
+    };
+
+    // Newest valid choice from the cookie or localStorage, or null if the visitor has not chosen
+    const readChoice = () => {
+      const found = [];
+      try {
+        const pair = document.cookie.split('; ').find((c) => c.indexOf(CONSENT_KEY + '=') === 0);
+        if (pair) found.push(parseChoice(pair.slice(CONSENT_KEY.length + 1)));
+      } catch (e) { /* cookies unavailable */ }
+      try {
+        found.push(parseChoice(localStorage.getItem(CONSENT_KEY)));
+      } catch (e) { /* storage unavailable */ }
+      const latest = found.filter(Boolean).sort((a, b) => b.time - a.time)[0];
+      return latest ? latest.value : null;
+    };
+
+    const saveChoice = (value) => {
+      const stored = value + '|' + new Date().toISOString();
+      try {
+        localStorage.setItem(CONSENT_KEY, stored);
+      } catch (e) { /* storage unavailable */ }
+      try {
+        document.cookie = CONSENT_KEY + '=' + stored + '; max-age=' + CONSENT_MAX_AGE + '; path=/; SameSite=Lax' +
+          (location.protocol === 'https:' ? '; Secure' : '');
+      } catch (e) { /* cookies unavailable */ }
+    };
+
+    const analyticsAllowed = (value) =>
+      value === 'accepted' || (value === null && ANALYTICS_DEFAULT_CONSENT === 'granted');
+
+    // Delete Google Analytics cookies (_ga, _ga_<id>, legacy _gid/_gat) for this host and its parent domains
+    const clearAnalyticsCookies = () => {
+      let names = [];
+      try {
+        names = document.cookie.split(';').map((c) => c.split('=')[0].trim())
+          .filter((name) => /^_ga($|_)|^_gid$|^_gat/.test(name));
+      } catch (e) { return; }
+      if (!names.length) return;
+      const host = location.hostname;
+      const domains = [''];
+      if (host.indexOf('.') > 0 && host.indexOf(':') === -1 && !/^[\d.]+$/.test(host)) {
+        const labels = host.split('.');
+        for (let i = 0; i < labels.length - 1; i++) domains.push('.' + labels.slice(i).join('.'));
+      }
+      names.forEach((name) => domains.forEach((domain) => {
+        try {
+          document.cookie = name + '=; max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' +
+            (domain ? '; domain=' + domain : '');
+        } catch (e) { /* cookies unavailable */ }
+      }));
+    };
+
+    const startAnalytics = () => {
+      if (!gaId) return;
+      window['ga-disable-' + gaId] = false;
+      if (gaLoaded) {
+        window.gtag('consent', 'update', { analytics_storage: 'granted' });
+        return;
+      }
+      gaLoaded = true;
+      window.dataLayer = window.dataLayer || [];
+      window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
+      window.gtag('consent', 'default', {
+        analytics_storage: 'granted',
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied'
+      });
+      window.gtag('js', new Date());
+      window.gtag('config', gaId, { anonymize_ip: true });
+      const tag = document.createElement('script');
+      tag.async = true;
+      tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(gaId);
+      // A Reject pressed while gtag.js was still downloading: tidy up anything it wrote
+      tag.addEventListener('load', () => {
+        if (!analyticsAllowed(choice)) setTimeout(clearAnalyticsCookies, 500);
+      });
+      document.head.appendChild(tag);
+    };
+
+    const stopAnalytics = () => {
+      if (gaId) window['ga-disable-' + gaId] = true;
+      if (gaLoaded) {
+        window.gtag('consent', 'update', {
+          analytics_storage: 'denied',
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied'
+        });
+      }
+      clearAnalyticsCookies();
+    };
+
+    const applyChoice = () => (analyticsAllowed(choice) ? startAnalytics() : stopAnalytics());
+
+    // Pages in /projects/ sit one folder down; 404.html loads this script root-relative because
+    // Firebase serves it at whatever depth the missing URL had, so its link is root-relative too
+    const privacyHref = () => {
+      const ownScript = document.querySelector('script[src$="script.js"]');
+      if (ownScript && ownScript.getAttribute('src').charAt(0) === '/') return '/privacy.html';
+      const parts = location.pathname.split('/');
+      return (parts[parts.length - 2] === 'projects' ? '../' : '') + 'privacy.html';
+    };
+
+    const setCursorHover = (on) => {
+      document.querySelectorAll('.cursor-dot, .cursor-ring').forEach((el) => el.classList.toggle('hovering', on));
+    };
+
+    const buildBanner = () => {
+      const el = document.createElement('div');
+      el.className = 'cookie-banner';
+      el.setAttribute('role', 'dialog');
+      el.setAttribute('aria-label', 'Cookie choices');
+      el.setAttribute('aria-live', 'polite');
+      el.setAttribute('aria-describedby', 'cookieBannerText');
+      el.hidden = true;
+
+      const text = document.createElement('p');
+      text.className = 'cookie-banner-text';
+      text.id = 'cookieBannerText';
+      text.textContent = 'This site uses cookies for anonymous visit statistics and for embedded YouTube videos. ';
+      const link = document.createElement('a');
+      link.href = privacyHref();
+      link.textContent = 'Privacy Policy';
+      text.appendChild(link);
+
+      const actions = document.createElement('div');
+      actions.className = 'cookie-banner-actions';
+      [['accepted', 'Accept', 'accept'], ['rejected', 'Reject', 'reject']].forEach(([value, label, modifier]) => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cookie-banner-btn cookie-banner-btn--' + modifier;
+        btn.dataset.cookieChoice = value;
+        btn.textContent = label;
+        actions.appendChild(btn);
+      });
+
+      el.append(text, actions);
+      el.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-cookie-choice]');
+        if (btn) choose(btn.dataset.cookieChoice);
+      });
+      // Same hover feedback as other links and buttons when the custom cursor is on
+      if (document.body.classList.contains('has-custom-cursor')) {
+        el.querySelectorAll('a, button').forEach((target) => {
+          target.addEventListener('mouseenter', () => setCursorHover(true));
+          target.addEventListener('mouseleave', () => setCursorHover(false));
+        });
+      }
+      document.body.prepend(el); // first in the tab order
+      return el;
+    };
+
+    // While the banner is up, the footer gets this much extra bottom padding (see styles.css)
+    // so the last lines of the page can always scroll clear of it
+    let bannerResize = null;
+    const reserveSpace = (on) => {
+      const root = document.documentElement;
+      if (!on) {
+        root.style.removeProperty('--cookie-banner-space');
+        if (bannerResize) bannerResize.disconnect();
+        return;
+      }
+      const update = () => root.style.setProperty('--cookie-banner-space', banner.offsetHeight + 'px');
+      update();
+      if ('ResizeObserver' in window) {
+        bannerResize = bannerResize || new ResizeObserver(update);
+        bannerResize.observe(banner);
+      }
+    };
+
+    const showBanner = (moveFocus) => {
+      if (!banner) banner = buildBanner();
+      clearTimeout(hideTimer);
+      banner.hidden = false;
+      void banner.offsetWidth; // start the entrance transition from the hidden state
+      banner.classList.add('is-visible');
+      reserveSpace(true);
+      if (moveFocus) banner.querySelector('button').focus({ preventScroll: true });
+    };
+
+    const hideBanner = () => {
+      if (!banner) return;
+      banner.classList.remove('is-visible');
+      reserveSpace(false);
+      setCursorHover(false);
+      clearTimeout(hideTimer);
+      hideTimer = setTimeout(() => { banner.hidden = true; }, 600);
+      if (returnFocusTo) {
+        returnFocusTo.focus({ preventScroll: true });
+        returnFocusTo = null;
+      }
+    };
+
+    const choose = (value) => {
+      choice = value;
+      saveChoice(value);
+      applyChoice();
+      hideBanner();
+    };
+
+    choice = readChoice();
+    applyChoice();
+
+    // First visit: show the banner once the preloader (if the page has one) has slid away
+    if (choice === null) {
+      const reveal = () => { if (choice === null) showBanner(false); };
+      const preloaderEl = document.getElementById('preloader');
+      if (preloaderEl && !preloaderEl.classList.contains('hidden') && 'MutationObserver' in window) {
+        const watcher = new MutationObserver(() => {
+          if (preloaderEl.classList.contains('hidden')) {
+            watcher.disconnect();
+            setTimeout(reveal, 500);
+          }
+        });
+        watcher.observe(preloaderEl, { attributes: true, attributeFilter: ['class'] });
+      } else {
+        setTimeout(reveal, 900);
+      }
+    }
+
+    // "Cookie settings" links reopen the banner
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest && e.target.closest('[data-cookie-settings]');
+      if (!trigger) return;
+      e.preventDefault();
+      returnFocusTo = trigger;
+      showBanner(true);
+    });
+
+    // Escape never records a choice; it only closes a banner reopened after a choice was made
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && choice !== null && banner && banner.classList.contains('is-visible')) hideBanner();
+    });
+
+    // Back/forward cache: pick up a choice made on another page
+    window.addEventListener('pageshow', (e) => {
+      if (!e.persisted) return;
+      choice = readChoice();
+      applyChoice();
+      if (choice !== null && banner && banner.classList.contains('is-visible')) hideBanner();
+    });
+  }
 
 });
 

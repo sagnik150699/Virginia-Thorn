@@ -14,7 +14,7 @@
 
   --color-text-primary: #f0ece4;
   --color-text-secondary: #b8b0a2;
-  --color-text-muted: #7a7368;
+  --color-text-muted: #8f887d; /* at least 4.5:1 on every surface up to --color-bg-elevated */
   --color-text-accent: #d4a853;
 
   --color-accent: #d4a853;
@@ -78,6 +78,10 @@
   --transition-spring: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   --blur-glass: blur(20px);
+
+  /* Underline for links in running text */
+  --underline-thickness: 1px;
+  --underline-offset: 0.25em;
 }
 
 /* ── Reset & Base ── */
@@ -153,6 +157,27 @@ a {
 
 a:hover {
   color: var(--color-accent-hover);
+}
+
+/* Links inside running text (paragraphs and list items in content sections, and the bio
+   heading) get a thin gold underline so they never rely on colour alone. Links that carry
+   a class are buttons, cards or other components and keep their own look. */
+.section p a:not([class]),
+.section li a:not([class]),
+.bio-content h2 a {
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--underline-thickness);
+  text-underline-offset: var(--underline-offset);
+  text-decoration-color: var(--color-border-hover);
+  border-bottom-color: transparent; /* the underline replaces the hover border of .bio-content a and .project-detail-body a */
+  transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
+}
+
+.section p a:not([class]):hover,
+.section li a:not([class]):hover,
+.bio-content h2 a:hover {
+  text-decoration-color: currentColor;
+  border-bottom-color: transparent;
 }
 
 ul, ol {
@@ -960,6 +985,16 @@ button {
   opacity: 1;
 }
 
+/* Touch screens have no hover, so a photographer credit stays visible as a slim caption along the bottom */
+@media (hover: none) {
+  .gallery-item-overlay:has(.gallery-credit) {
+    inset: auto 0 0;
+    opacity: 1;
+    padding: var(--space-lg) var(--space-sm) var(--space-xs);
+    background: linear-gradient(to top, var(--color-overlay-heavy), transparent);
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════════
    VIDEO REELS GRID
    ═══════════════════════════════════════════════════════════════ */
@@ -1674,7 +1709,7 @@ button {
 }
 
 .cv-section img {
-  max-width: 600px;
+  max-width: min(600px, 100%);
   margin: 0 auto var(--space-lg);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
@@ -2081,6 +2116,10 @@ button {
   .gallery-grid--three {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  .cv-section {
+    padding: var(--space-lg) var(--space-md);
+  }
 }
 
 @media (max-width: 640px) {
@@ -2192,6 +2231,10 @@ button {
 
   .page-hero {
     padding: calc(var(--space-xl) + 56px) var(--space-md) var(--space-lg);
+  }
+
+  .cv-section {
+    padding: var(--space-md) var(--space-sm);
   }
 }
 
@@ -2774,5 +2817,473 @@ animation: particleDrift var(--duration, 8s) var(--delay, 0s) ease-in-out infini
   .cursor-dot,
   .cursor-ring {
     display: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PRIVACY & COOKIES
+   Footer legal line (every page), the cookie banner built by the
+   consent module in script.js, and the privacy policy page.
+   Kept last so these rules win over both layers above.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Footer legal line: Privacy Policy | Cookie settings ── */
+.footer-legal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  /* sit just under the copyright line rather than a full footer gap below it */
+  margin-top: calc(var(--space-xs) - var(--space-lg));
+  font-size: var(--fs-caption);
+  color: var(--color-text-muted);
+}
+
+.footer-legal a {
+  display: inline-block;
+  padding: var(--space-xs) 0; /* taller tap target for small text */
+  color: var(--color-text-muted);
+  transition: color var(--transition-fast);
+}
+
+.footer-legal a:hover {
+  color: var(--color-accent);
+}
+
+/* Joins the staggered FOOTER ENTRANCE, one step after .footer-copy */
+.footer .footer-legal {
+  opacity: 0;
+  transform: translateY(var(--space-sm));
+}
+
+.footer.visible .footer-legal {
+  animation: footerReveal 0.6s 0.55s forwards;
+}
+
+/* ── Cookie banner ──
+   z-index: above the nav (1000) and mobile menu (999), below the
+   lightbox (2000), custom cursor (9997), preloader and page-transition
+   curtain (9999 / 10000), so the cursor and curtain stay on top. */
+.cookie-banner {
+  position: fixed;
+  left: var(--space-sm);
+  right: var(--space-sm);
+  bottom: var(--space-md);
+  z-index: 1500;
+  max-width: calc(var(--max-width-narrow) - 2 * var(--space-xl)); /* 42rem */
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-md) var(--space-lg);
+  background: var(--color-bg-glass);
+  backdrop-filter: var(--blur-glass);
+  -webkit-backdrop-filter: var(--blur-glass);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  font-family: var(--font-body);
+  color: var(--color-text-secondary);
+  opacity: 0;
+  transform: translateY(var(--space-md));
+  pointer-events: none;
+  transition: opacity var(--transition-slow), transform var(--transition-slow);
+}
+
+/* Gold hairline, as on the footer */
+.cookie-banner::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--space-3xl);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
+}
+
+.cookie-banner.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+/* While the banner is up, script.js sets --cookie-banner-space to its height so the
+   footer can scroll clear of it; unset, this is the footer's usual padding */
+.footer {
+  padding-bottom: calc(var(--space-2xl) + var(--cookie-banner-space, 0px));
+}
+
+.cookie-banner[hidden] {
+  display: none;
+}
+
+.cookie-banner-text {
+  flex: 1 1 auto;
+  font-size: var(--fs-small);
+  line-height: var(--lh-body);
+}
+
+.cookie-banner-text a {
+  color: var(--color-accent);
+  border-bottom: 1px solid var(--color-border-hover);
+  transition: color var(--transition-fast), border-color var(--transition-fast);
+}
+
+.cookie-banner-text a:hover {
+  color: var(--color-accent-hover);
+  border-bottom-color: var(--color-accent-hover);
+}
+
+.cookie-banner-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--space-xs);
+}
+
+.cookie-banner-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--space-lg);
+  padding: var(--space-xs) var(--space-md);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: var(--fs-caption);
+  font-weight: 600;
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  transition: background var(--transition-base), color var(--transition-base),
+              border-color var(--transition-base), box-shadow var(--transition-base);
+}
+
+/* Accept: the gold primary button, like .contact-spotlight-btn / .form-submit */
+.cookie-banner-btn--accept {
+  background: var(--color-accent);
+  color: var(--color-bg-primary);
+}
+
+.cookie-banner-btn--accept:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  box-shadow: var(--shadow-glow);
+}
+
+/* Reject: same size and outline, so it is as easy to press as Accept */
+.cookie-banner-btn--reject {
+  background: transparent;
+  color: var(--color-text-primary);
+}
+
+.cookie-banner-btn--reject:hover {
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+}
+
+/* ── Privacy policy page (privacy.html) ── */
+.legal-section + .legal-section {
+  margin-top: var(--space-lg);
+  padding-top: var(--space-lg);
+  border-top: 1px solid var(--color-border);
+}
+
+.legal-section > :last-child {
+  margin-bottom: 0;
+}
+
+.legal-content h2 {
+  font-size: var(--fs-h3);
+  font-weight: 400;
+  margin-bottom: var(--space-sm);
+}
+
+.legal-content p,
+.legal-content li {
+  font-size: var(--fs-body);
+}
+
+.legal-content .legal-updated {
+  font-size: var(--fs-caption);
+  font-weight: 500;
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--color-text-secondary); /* a step brighter than muted for this small uppercase line */
+  margin-bottom: var(--space-sm);
+}
+
+/* Links in the policy text keep a faint gold underline so they never rely on colour alone */
+.legal-content a {
+  border-bottom-color: var(--color-border-hover);
+}
+
+.legal-content .legal-lead {
+  color: var(--color-text-primary);
+}
+
+.legal-content ul {
+  list-style: disc;
+  padding-left: var(--space-md);
+  margin-bottom: var(--space-md);
+  color: var(--color-text-secondary);
+}
+
+.legal-content li {
+  margin-bottom: var(--space-xs);
+}
+
+.legal-content li::marker {
+  color: var(--color-accent);
+}
+
+.legal-content strong {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.legal-content code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-small);
+  color: var(--color-text-primary);
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-sm);
+  padding: 0 calc(var(--space-xs) / 2);
+  overflow-wrap: anywhere;
+}
+
+.legal-table-wrap {
+  position: relative;
+  overflow-x: auto;
+  margin: var(--space-md) 0 var(--space-md);
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.legal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-small);
+  line-height: var(--lh-body);
+  color: var(--color-text-secondary);
+}
+
+.legal-table th,
+.legal-table td {
+  padding: var(--space-sm);
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.legal-table thead th {
+  font-size: var(--fs-caption);
+  font-weight: 500;
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--color-accent);
+  background: var(--color-bg-elevated);
+  white-space: nowrap;
+}
+
+.legal-table tbody th {
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.legal-table code {
+  white-space: nowrap; /* keep cookie names whole in the Name column */
+}
+
+.legal-table tbody tr:last-child th,
+.legal-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .cookie-banner {
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-sm);
+    bottom: var(--space-sm);
+    padding: var(--space-md);
+  }
+
+  .cookie-banner-btn {
+    flex: 1 1 0;
+  }
+
+  /* Cookie table becomes one card per cookie; the roles in the markup keep it a table for screen readers */
+  .legal-table thead {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .legal-table,
+  .legal-table tbody,
+  .legal-table tr,
+  .legal-table th,
+  .legal-table td {
+    display: block;
+  }
+
+  .legal-table tbody tr {
+    padding: var(--space-xs) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .legal-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .legal-table th,
+  .legal-table td {
+    padding: var(--space-xs) var(--space-sm);
+    border-bottom: none;
+  }
+
+  .legal-table code {
+    white-space: normal;
+  }
+
+  /* Same gold caption style as the desktop column headers */
+  .legal-table td::before {
+    content: attr(data-label);
+    content: attr(data-label) / '';
+    display: block;
+    font-size: var(--fs-caption);
+    font-weight: 500;
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+}
+
+@media (max-width: 480px) {
+  .cookie-banner-actions {
+    flex-direction: column;
+  }
+
+  .cookie-banner-btn {
+    flex: none;
+    width: 100%;
+  }
+
+  .legal-section + .legal-section {
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+  }
+}
+
+/* ── Reduced motion: no slide or fade, and the legal line never waits for the footer trigger ── */
+@media (prefers-reduced-motion: reduce) {
+  .cookie-banner,
+  .cookie-banner-btn {
+    transition: none;
+  }
+
+  .cookie-banner,
+  .cookie-banner.is-visible {
+    transform: none;
+  }
+
+  .footer .footer-legal,
+  .footer.visible .footer-legal {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VOICE-OVER LANDING PAGE
+   Used only by best-voice-over-artist-uk.html, which is deliberately
+   not linked from the menu or footer (search engines find it through
+   sitemap.xml). Everything else on that page reuses existing components.
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Hero: the long, question-style H1 reads better without the wide tracking */
+.landing-hero .page-hero-title {
+  letter-spacing: normal;
+  max-width: var(--max-width-narrow);
+  margin: 0 auto;
+}
+
+.landing-hero .page-hero-subtitle {
+  max-width: var(--max-width-narrow);
+}
+
+/* The main button and the secondary text link, side by side and wrapping on phones */
+.landing-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-sm) var(--space-md);
+}
+
+.landing-hero .landing-cta-row {
+  margin-top: var(--space-lg);
+}
+
+/* The secondary link is underlined like links in running text, so it never relies on colour alone */
+.landing-alt-link {
+  font-size: var(--fs-small);
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--underline-thickness);
+  text-underline-offset: var(--underline-offset);
+  text-decoration-color: var(--color-border-hover);
+  transition: color var(--transition-fast), text-decoration-color var(--transition-fast);
+}
+
+.landing-alt-link:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Keep her face in frame when the portrait is cropped to 16:9 on phones */
+.landing-intro .vo-intro-image img {
+  object-position: 50% 25%;
+}
+
+/* Source line under the Emmy card */
+.landing-source {
+  margin-top: var(--space-sm);
+  font-size: var(--fs-small);
+}
+
+/* Space between the evidence cards and the photo row */
+.landing-evidence {
+  margin-top: var(--space-md);
+}
+
+/* FAQ: two columns, questions in sentence case rather than the uppercase card-title style */
+.vo-faq {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.vo-faq .vo-specs h3 {
+  text-transform: none;
+  letter-spacing: normal;
+  line-height: var(--lh-heading);
+}
+
+/* The closing line under the human-versus-AI cards */
+.landing-conclusion {
+  max-width: var(--max-width-narrow);
+  margin: var(--space-xl) auto 0;
+  text-align: center;
+  color: var(--color-text-primary);
+}
+
+@media (max-width: 768px) {
+  .vo-faq {
+    grid-template-columns: 1fr;
   }
 }

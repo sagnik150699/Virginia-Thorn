@@ -1,0 +1,17 @@
+{
+  "name": "virginia-thorn-website",
+  "private": true,
+  "description": "Portfolio website for Virginia Thorn. Only public/ is deployed; this file only runs the local checks and preview.",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "check": "node scripts/check.js",
+    "check:smoke": "node scripts/check.js --smoke",
+    "serve": "node scripts/serve.js"
+  },
+  "devDependencies": {
+    "puppeteer-core": "24.43.1"
+  }
+}

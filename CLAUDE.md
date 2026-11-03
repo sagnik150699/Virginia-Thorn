@@ -1,75 +1,52 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Portfolio website of Virginia Thorn, actor, singer and voice-over artist: plain HTML, one stylesheet, one script, no framework, no bundler, no build step.
+Everything in `public/` is the published website. The root `package.json` only holds optional local tools (the checks and a preview server) and is not deployed; `docs/` holds the notes listed at the end.
 
-## What this is
+## Who you are working with
 
-Static portfolio site for actor/singer/voice-over artist Virginia Thorn. Plain HTML, one CSS file, one JS file, self-hosted fonts/images/audio. No framework, no bundler, no package.json, no tests, no linter. Everything that ships lives in `public/`; the repo root only holds Firebase config, the deploy workflow, README (its screenshots live in `docs/screenshots/` and are not deployed) and LICENSE (all rights reserved, the copy and media belong to the client).
+- **Virginia, the site owner, is the user.** She develops the site from her own PC through Claude Code and has no coding background. Every kind of change is in scope (copy, design, new pages, features): Claude does the technical work, explains each change in plain language (what changed, what she will see, why) and asks her to decide when there is a real choice. Avoid jargon; if a technical word is unavoidable, explain it in a few words.
+- **Sagnik Bhattacharya** set the site up. From the handover in November 2026 Virginia runs it on her own and he is not involved; until then he may also work here from his own PC.
 
 ## Commands
 
-There is no build step. Preview by serving `public/` with any static server:
-
 ```bash
-cd public && python -m http.server 8765 --bind 127.0.0.1
-# or, to get Firebase's cleanUrls behaviour (/bio instead of /bio.html):
-firebase serve
+npm run serve          # preview at http://127.0.0.1:8765/ (clean URLs, the 404 page and audio seeking work); needs no install
+npm run check          # optional, when something is in doubt: checks a-g in a few seconds
+npm install            # only for the optional browser test below (puppeteer-core drives the installed Chrome)
+npm run check:smoke    # optional: adds check h, every page in headless Chrome at 1440x900 and 390x844, about 15 s
+firebase serve         # optional alternative preview, if the Firebase CLI is installed
 ```
 
-Deploy happens automatically: every push to `main` runs `.github/workflows/deploy-production.yml`, which deploys `public/` to Firebase Hosting project `virginia-thorn` (live channel). Manual equivalent: `firebase deploy --only hosting`.
+## Hosting
 
-Useful sanity checks, since nothing runs automatically:
+- The live build is https://virginia-thorn.web.app, updated within a few minutes by every push to `main` that passes GitHub's checks.
+- virginiathorn.com is NOT pointed at this build yet: check changes locally or on virginia-thorn.web.app, never on the main domain.
 
-```bash
-node --check public/script.js
-python -c "s=open('public/styles.css').read();print(s.count('{'),s.count('}'))"   # must match
-gitleaks detect --source . -v      # same scan CI runs; full history, not just the working tree
-```
+## Committing and publishing
 
-`.github/workflows/secret-scan.yml` runs gitleaks over the whole history on every push and PR and weekly. The repo is public on GitHub, so treat anything committed as published; `.gitignore` already excludes `.env*`, key/certificate files, Firebase service-account JSON and `.claude/`.
+- Pull before you start work. When a change is ready, Claude commits and pushes; never make the owner wait on local checks. Temporary exception until the handover in November 2026: on Sagnik's PC (its `git config user.name` is Sagnik Bhattacharya) he commits and pushes himself, so leave the changes in the working copy and report.
+- Commit messages: one line, imperative, plain words, saying what changed and why, under about 72 characters (for example "Fix sideways scrolling on the CV page on phones"); never just "update", "fix" or "changes"; no `Co-Authored-By` trailer.
+- On every push GitHub runs `node scripts/check.js` and deploys only when it passes. If a push did not go live, open the failed run in the repository's Actions tab, fix what the `check` job lists and push again. For a removal the owner asked for, put `[allow-removals]` in a commit message (an empty commit with that note is enough), so check e accepts it.
+- Rename an image, recording or page with `git mv`, then update every reference (pages, `sitemap.xml`, share tags, JSON-LD); check e reports `renamed: old → new` instead of a removal, and checks c and d fail on any reference left on the old name.
+- Check f flags email addresses, phone numbers, UK postcodes and keys in changed files. Never allow-list a hit yourself: ask the owner, then add the exact text and who approved it to `ALLOWED_PRIVATE_DATA` in `scripts/check.js`.
+- A standalone page (no site navigation, `id="navbar"`) needs no `styles.css` or `script.js`, only `<title>`, charset and viewport. A public page left out of `sitemap.xml` only gives a warning: add it there, or mark it noindex.
 
-## Hosting state (easy to get wrong)
+## Hard rules
 
-- `virginiathorn.com` still points at the old Squarespace site. The Firebase build is only reachable at `https://virginia-thorn.web.app` until DNS is switched. Verify changes there or locally, never on the main domain.
-- `firebase.json` sets `cleanUrls: true`, so on Firebase `/bio.html` 301s to `/bio`. Internal links, `<link rel="canonical">` and `sitemap.xml` all still use `.html`; it works, but keep them consistent if you change one.
-- `firebase.json` also sets long cache headers: CSS/JS/HTML 7 days, images 30 days, fonts and MP3s 1 year immutable. There is no cache-busting, so returning visitors can see stale CSS/JS for up to a week after a deploy.
-- `firebase.json` header rules merge: Hosting applies every rule whose glob matches the request (later rules override same-named keys), so the `**` security-header rule (nosniff, X-Frame-Options, Referrer-Policy, Permissions-Policy) combines with the per-type cache rules. HSTS is added by Firebase itself. Note the globs match the request path, so clean URLs like `/bio` are only covered by `**`, not by `**/*.html`. The local Hosting emulator does not emit these headers at all, so verify them on the deployed URL.
+- **Never delete content on your own.** Copy, credits, images and outbound links are Virginia's: change or remove them only when she asks. Design, markup and CSS changes are fine.
+- **The repo is public.** Keep `.env*`, key files and `firebase-debug*.log` out of git, and read every change for private details the checks cannot recognise.
+- **Never publish private information.** Anything said only in conversation is private unless the owner says it may be public.
+- **One to-do list.** Open tasks live in `docs/WEBSITE-PREFERENCES.md`, and that list is shared between PCs through git. When you finish one, mark it done there with the date in the same change; add new tasks there, nowhere else.
+- **End of session.** Before a session ends, write down what was learnt: non-obvious facts about the site go into `docs/MEMORY-MAP.md`, preferences and decisions into `docs/WEBSITE-PREFERENCES.md`, finished or new tasks into its Open tasks list. Those files are how lessons travel between PCs; keep private details out of them.
+- **Subagents.** Use subagents for each distinct task and keep the main chat small; point agents at file paths rather than pasting file contents. Pick the model per task (Fable or Opus for judgement-heavy work, Sonnet for routine passes, Haiku for cheap scans); subagents may spawn their own subagents when a task splits further. There is no need to save tokens: spawn Opus or Fable freely whenever a task benefits, and a subagent may call up a stronger model for reference; keeping the main chat small is about a clear, fresh context, not cost.
+- **Line endings.** Working-copy files are CRLF; scripts that rewrite files must keep CRLF.
+- **Styles.** Always use the `:root` tokens in `public/styles.css`, never raw values.
 
-## Architecture
+## Read when needed
 
-### Pages are hand-duplicated, not templated
+- `docs/MEMORY-MAP.md`: how the site is built. Where everything lives, the contracts between the HTML, `styles.css` and `script.js`, the privacy module, hosting and caching, the checks, and how to verify a change.
+- `docs/WEBSITE-PREFERENCES.md`: what the owner wants. Content, design and SEO conventions, privacy and tracking decisions, the open tasks and the before-publishing checklist.
+- `docs/GETTING-STARTED.md`: the owner's plain-English guide. Setting up a new PC, everyday use, what to keep private, the accounts she owns, and what to do when something goes wrong.
 
-18 pages: `index.html`, seven top-level pages (`bio`, `reels`, `headshots`, `music`, `voiceover`, `projects`, `contact`), `cv.html` (noindex, disallowed in `robots.txt`), `404.html`, and eight detail pages in `public/projects/` that reference assets with `../`. Every page repeats the same chrome by copy: page-transition curtains, preloader, `nav#navbar` with `.nav-links`, `#navToggle` and the separate `#navMobile` overlay, then a `.page-hero` (sub-pages) or the split `.hero` (index only), sections, footer, optional lightbox markup, and `<script src="script.js">`. A change to the nav, footer, or head meta has to be applied to all 18 files; the mobile nav is a second copy of the links inside each file. Sub-pages hardcode `class="nav scrolled"` and `class="nav-link active"`; the index nav is transparent and gains `.scrolled` on scroll.
-
-Adding a page means: create it with the full chrome, add it to both nav lists in every page, add it to `sitemap.xml`, and update `llms.txt` if it is a real section.
-
-### styles.css is two layers, and source order matters
-
-Roughly the first 2,250 lines are the design system (`:root` tokens for colours, type scale, spacing, radii, shadows, transitions), components, and the responsive blocks. After that comes an "enhancement" layer (page-transition curtain, enhanced hero keyframes, custom cursor, particles, reveal variants, animated gradient card borders, button ripple/glow, footer entrance, and a second `@media (max-width: 768px)` block near the very end). Later rules override earlier ones at equal specificity, so before adding a responsive override check the trailing blocks; the breakpoints in use are 1180, 1100, 1024, 960, 768, 640 and 480. Always use the `:root` tokens rather than raw values.
-
-### Entrance animations are a contract between CSS and script.js
-
-Several classes start at `opacity: 0` and only become visible when something else adds a trigger class:
-
-- `.reveal`, `.reveal-left`, `.reveal-right`, `.reveal-scale`, `.reveal-blur` get `.visible` from an IntersectionObserver in `script.js`.
-- `.hero-*` elements animate only once `.hero.loaded` is set, which happens when the preloader is dismissed (window `load` + 400ms, with a 2.5s fallback).
-- `.footer .nav-logo`, `.footer .footer-social`, `.footer .footer-copy` animate only under `.footer.visible`.
-- `.page-hero-title` and `.page-hero .section-label` animate purely in CSS on load.
-
-Reusing one of these classes outside its trigger leaves the element permanently invisible (this happened with `.footer-social` on the contact page). The `prefers-reduced-motion` block forces everything visible, which is also the trick for honest headless screenshots: plain `chrome --headless --screenshot` captures titles and reveals at opacity 0 and stretches the `100vh` hero to the window height, so emulate reduced motion, wait for `.preloader.hidden`, scroll through the page, then take a full-page shot (puppeteer-core with the installed Chrome works). The README screenshots were captured with motion left on instead: Playwright at 1440×900 and 2× scale, scroll through to fire every reveal, then `finish()` each finite entry of `document.getAnimations()` (the particle loops are infinite). `python -m http.server` ignores Range requests, so the audio players cannot seek under it; `npx http-server public` can.
-
-### script.js feature modules and the markup they expect
-
-One `DOMContentLoaded` block with independent modules: nav scroll/toggle, reveal observers, smooth anchor scroll, custom cursor and 3D card tilt (desktop, non-touch, width > 768 only), `[data-parallax]`, floating particles, button ripple and magnetic hover, and a page-transition that intercepts clicks on relative internal links and delays navigation by 400ms (a `pageshow` handler cleans up after back/forward cache restores). Two things have markup contracts:
-
-- Custom audio player: `.audio-card.vo-audio-card[data-src]` containing `.player-btn` with `.player-icon-play` / `.player-icon-pause`, `.player-progress > .player-progress-fill`, and `.player-time`. Audio objects are created lazily with `preload = 'none'`; only one card plays at a time.
-- Lightbox: global `openLightbox(el)` / `closeLightbox()` are called from inline `onclick`. `el` may be a wrapper containing an `<img>` or the `<img>` itself. Any page that uses them must include the `#lightbox` / `#lightboxImg` markup before `script.js`.
-
-The contact form is markup only: there is no `<form>` element, no action and no backend, so the submit button does nothing. Bookings go through the Spotlight link.
-
-## Working conventions
-
-- **Never delete content.** Copy, credits, images and outbound links are the client's material. Design, layout, CSS and markup restructuring are welcome; removing a paragraph, image or link is not. Before finishing a design change, diff the visible text, `src` list and `href` list of each edited page against `git HEAD` and confirm they are identical.
-- Files in the working copy are CRLF (git autocrlf). Scripts that rewrite files should preserve or restore CRLF, otherwise every line shows as changed and git warns on each file.
-- Commit messages should not carry a `Co-Authored-By` trailer.
-- Keep `.claude/`, `.env` files and `firebase-debug*.log` out of version control (README guidance; the Firebase logs are already in `.gitignore`).
+Open only the file and section a task needs. When something described in them changes, update that file in the same change rather than adding detail here; this file stays short.

@@ -6,7 +6,30 @@ on:
       - main
 
 jobs:
+  # The same checks as "npm run check" on your computer. If any of them fails,
+  # the deploy job below does not run and the live site stays as it was.
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history, so the check can compare with main before this push
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Run the site checks
+        env:
+          # The commit main pointed to before this push; everything pushed since is compared with it
+          BASE: ${{ github.event.before }}
+        run: node scripts/check.js --base "$BASE"
+
   deploy:
+    needs: check
     runs-on: ubuntu-latest
     permissions:
       contents: read

@@ -70,6 +70,7 @@ Desktop views at 1440 × 900, mobile views at 390 × 844. Click any image for th
 ## 🛠️ Tech Stack
 * **Core:** HTML5, CSS3, Vanilla JS
 * **Deployment:** Firebase Hosting (configured for fully static delivery)
+* **Checks:** GitHub runs the site checks (`npm run check`) on every push and deploys only if they pass.
 
 ## 📁 Project Structure
 
@@ -84,13 +85,19 @@ public/
 ├── headshots.html     # Photography gallery
 ├── index.html         # Homepage
 ├── music.html         # Music portfolio
+├── privacy.html       # Privacy policy and cookie information
 ├── projects.html      # Past and current acting/directing projects
 ├── reels.html         # Video showreels
 ├── script.js          # Interactions (Lightbox, Navigation, etc.)
 ├── styles.css         # Global styles
 └── voiceover.html     # Voiceover samples
 docs/
-└── screenshots/       # README screenshots (not deployed)
+├── GETTING-STARTED.md     # Plain-English guide for the owner: PC setup, everyday use, privacy, accounts
+├── MEMORY-MAP.md          # How the site is built: file map, CSS/JS contracts, hosting, verification
+├── WEBSITE-PREFERENCES.md # Owner preferences, SEO conventions, privacy decisions, open tasks
+└── screenshots/           # README screenshots (not deployed)
+scripts/               # Site checks (check.js, run by GitHub before every deploy) and preview server; not deployed
+package.json           # Optional local tools: npm run serve, check, check:smoke; not deployed
 firebase.json          # Firebase Hosting configuration
 .firebaserc            # Firebase project alias
 ```
@@ -104,13 +111,14 @@ firebase.json          # Firebase Hosting configuration
    ```
 
 2. **Serve Locally:**
-   Since this is a fully static site, you can use any local web server. If you have the Firebase CLI installed:
+   Since this is a fully static site, any local web server works. The bundled preview server needs no install and behaves like Firebase (clean URLs, the 404 page, audio seeking):
    ```bash
-   firebase serve
+   npm run serve
    ```
-   *Alternatively, use extensions like `Live Server` in VS Code, Python's `http.server`, or Node's `http-server`.*
+   *Python's `http.server` also works but cannot seek audio; `firebase serve` works too if you have the Firebase CLI installed.*
 
 3. **Deploying (Firebase):**
+   The normal route is a push to `main`: GitHub runs the site checks and deploys only if they pass. A manual deploy skips those checks:
    ```bash
    firebase deploy --only hosting
    ```
